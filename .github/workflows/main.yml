@@ -6,10 +6,46 @@ jobs:
     runs-on: ubuntu-22.04
 
     steps:
-      - uses: actions/checkout@v4
-      - uses: isbang/compose-action@v1.5.1
+      - name: Склонировать репозиторий
+        uses: actions/checkout@v4
+
+      - name: Запустить сервис php
+        uses: isbang/compose-action@v1.5.1
+        with:
+          compose-file: "compose.yml"
+          services: php
+      
+      - name: Собрать зависимости проекта
+        run: docker compose exec php composer install
+
+      - name: Загрузить зависимости как артефакт проекта
+        uses: actions/upload-artifact@v4
+        with:
+          name: composer-vendor
+          path: vendor
+          retention-days: 1
+
+  test:
+
+    runs-on: ubuntu-22.04
+
+    needs: [build]
+
+    steps:
+      - name: Склонировать репозиторий
+        uses: actions/checkout@v4
+      
+      - name: Запустить сервис php
+        uses: isbang/compose-action@v1.5.1
         with:
           compose-file: "compose.yml"
           services: php
         
-      - run: docker compose exec php composer install
+      - name: Скачать зависимости как артефакт проекта
+        uses: actions/download-artifact@v4
+        with:
+          name: composer-vendor
+          path: vendor
+        
+      - name: Запуск тестов
+        run: docker compose exec php composer exec phpunit
