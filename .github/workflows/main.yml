@@ -1,0 +1,70 @@
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Склонировать репозиторий
+        uses: actions/checkout@v4
+
+      - name: Запустить сервис php
+        uses: isbang/compose-action@v1.5.1
+        with:
+          compose-file: "compose.yml"
+          services: php
+      
+      - name: Собрать зависимости проекта
+        run: docker compose exec php composer install
+
+      - name: Загрузить зависимости как артефакт проекта
+        uses: actions/upload-artifact@v4
+        with:
+          name: composer-vendor
+          path: vendor
+          retention-days: 1
+
+  test:
+
+    runs-on: ubuntu-22.04
+
+    needs: [build]
+
+    steps:
+      - name: Склонировать репозиторий
+        uses: actions/checkout@v4
+      
+      - name: Запустить сервис php
+        uses: isbang/compose-action@v1.5.1
+        with:
+          compose-file: "compose.yml"
+          services: php
+        
+      - name: Скачать зависимости как артефакт проекта
+        uses: actions/download-artifact@v4
+        with:
+          name: composer-vendor
+          path: vendor
+
+      - name: Восстановить права артефактов
+        run: chmod +x vendor/bin/*
+        
+      - name: Запуск тестов
+        run: docker compose exec php composer exec phpunit
+
+  deploy:
+
+    runs-on: self-hosted
+
+    if: github.ref == 'refs/heads/master'
+
+    needs: [test]
+
+    steps:
+      - name: Деплой
+        run: |
+          cd /home/labtracker/deploy
+          git pull
+          docker compose --env-file .env.local up -d
+          docker compose exec php composer install --no-interaction --prefer-dist --optimize-autoloader
