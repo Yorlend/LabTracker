@@ -1,0 +1,15 @@
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-22.04
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: isbang/compose-action@v1.5.1
+        with:
+          compose-file: "compose.yml"
+          services: php
+        
+      - run: docker compose exec php composer install
