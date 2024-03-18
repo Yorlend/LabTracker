@@ -9,6 +9,7 @@
 /vendor/
 ###< symfony/framework-bundle ###
 
+.db_data
 ### Composer ###
 composer.phar
 /vendor/
