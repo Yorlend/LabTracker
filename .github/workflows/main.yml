@@ -52,3 +52,19 @@ jobs:
         
       - name: Запуск тестов
         run: docker compose exec php composer exec phpunit
+
+  deploy:
+
+    runs-on: self-hosted
+
+    if: github.ref == 'refs/heads/master'
+
+    needs: [test]
+
+    steps:
+      - name: Деплой
+        run: |
+          cd /home/labtracker/deploy
+          git pull
+          docker compose --env-file .env.local up -d
+          docker compose exec php composer install --no-interaction --prefer-dist --optimize-autoloader
