@@ -98,3 +98,13 @@ composer.phar
 /web/js/
 
 # End of https://www.toptal.com/developers/gitignore/api/composer,symfony,phpunit,php-cs-fixer
+
+###> symfony/phpunit-bridge ###
+.phpunit.result.cache
+/phpunit.xml
+###< symfony/phpunit-bridge ###
+
+###> phpunit/phpunit ###
+/phpunit.xml
+.phpunit.result.cache
+###< phpunit/phpunit ###
