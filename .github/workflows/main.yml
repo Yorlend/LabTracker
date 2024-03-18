@@ -46,6 +46,9 @@ jobs:
         with:
           name: composer-vendor
           path: vendor
+
+      - name: Восстановить права артефактов
+        run: chmod +x vendor/bin/*
         
       - name: Запуск тестов
         run: docker compose exec php composer exec phpunit
