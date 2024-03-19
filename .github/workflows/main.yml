@@ -12,7 +12,7 @@ jobs:
       - name: Запустить сервис php
         uses: isbang/compose-action@v1.5.1
         with:
-          compose-file: "compose.yml"
+          compose-file: "compose.test.yml"
           services: php
       
       - name: Собрать зависимости проекта
@@ -38,7 +38,7 @@ jobs:
       - name: Запустить сервис php
         uses: isbang/compose-action@v1.5.1
         with:
-          compose-file: "compose.yml"
+          compose-file: "compose.test.yml"
           services: php
         
       - name: Скачать зависимости как артефакт проекта
