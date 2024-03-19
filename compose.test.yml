@@ -7,3 +7,4 @@ services:
     container_name: php-ci
     volumes:
       - ./:/var/www/symfony:cached
+    user: "1000:1000"
