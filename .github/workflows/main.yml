@@ -3,7 +3,7 @@ on: [push]
 jobs:
   build:
 
-    runs-on: ubuntu-22.04
+    runs-on: self-hosted
 
     steps:
       - name: Склонировать репозиторий
@@ -27,7 +27,7 @@ jobs:
 
   test:
 
-    runs-on: ubuntu-22.04
+    runs-on: self-hosted
 
     needs: [build]
 
