@@ -3,7 +3,7 @@ on: [push]
 jobs:
   build:
 
-    runs-on: ubuntu-22.04
+    runs-on: self-hosted
 
     steps:
       - name: Склонировать репозиторий
@@ -12,7 +12,7 @@ jobs:
       - name: Запустить сервис php
         uses: isbang/compose-action@v1.5.1
         with:
-          compose-file: "compose.yml"
+          compose-file: "compose.test.yml"
           services: php
       
       - name: Собрать зависимости проекта
@@ -27,7 +27,7 @@ jobs:
 
   test:
 
-    runs-on: ubuntu-22.04
+    runs-on: self-hosted
 
     needs: [build]
 
@@ -38,7 +38,7 @@ jobs:
       - name: Запустить сервис php
         uses: isbang/compose-action@v1.5.1
         with:
-          compose-file: "compose.yml"
+          compose-file: "compose.test.yml"
           services: php
         
       - name: Скачать зависимости как артефакт проекта

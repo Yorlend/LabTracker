@@ -21,6 +21,7 @@ services:
     container_name: php-labtracker
     volumes:
       - ./:/var/www/symfony:cached
+    user: "1000:1000"
     networks:
       - symfony_app
   nginx:
