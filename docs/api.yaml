@@ -1,7 +1,7 @@
 openapi: "3.0.2"
 info:
   title: LabTracker
-  version: "1.0"
+  version: "0.1"
 
 servers:
   - url: https://localhost:8080/api/v1
@@ -599,7 +599,6 @@ paths:
         500:
           $ref: '#/components/responses/500'
 
-  /solutions/{id}/info:
     patch:
       tags:
         - solution
@@ -621,7 +620,8 @@ paths:
         500:
           $ref: '#/components/responses/500'
 
-  /solutions/{id}/file:
+
+  /solutions/{id}/files:
     patch:
       tags:
         - solution
@@ -779,8 +779,10 @@ components:
         - $ref: '#/components/schemas/GroupLite'
         - type: object
           properties:
-            teacher:
-              $ref: '#/components/schemas/UserLite'
+            teachers:
+              type: array
+              items:
+                $ref: '#/components/schemas/UserLite'
             labs:
               type: array
               items:
@@ -851,6 +853,9 @@ components:
         user_id:
           type: integer
           example: 1
+        lab_id:
+          type: integer
+          example: 1
         user_name:
           type: string
           example: "username"
@@ -884,7 +889,23 @@ components:
             $ref: '#/components/schemas/FileStore'
     SolutionStore:
       allOf:
-        - $ref: '#/components/schemas/SolutionUpdateDesc'
+        - type: object
+          required:
+            - user_id
+            - user_name
+            - state
+            - teacher_id
+            - description
+          properties:
+            lab_id:
+              type: integer
+              example: 1
+            teacher_id:
+              type: integer
+              example: 1
+            description:
+              type: string
+              example: "description"
         - $ref: '#/components/schemas/SolutionUpdateFile'
     SolutionFile:
       type: object
