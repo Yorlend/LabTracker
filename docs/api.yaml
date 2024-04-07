@@ -95,17 +95,17 @@ paths:
           $ref: '#/components/responses/400'
         500:
           $ref: '#/components/responses/500'
-    parameters:
-      - in: query
-        name: group
-        schema:
-          type: integer
-          example: 1
-      - in: query
-        name: role
-        schema:
-          type: integer
-          example: 1
+      parameters:
+        - in: query
+          name: group
+          schema:
+            type: integer
+            example: 1
+        - in: query
+          name: role
+          schema:
+            type: integer
+            example: 1
 
 
   /users/{id}:
@@ -779,10 +779,9 @@ components:
         - $ref: '#/components/schemas/GroupLite'
         - type: object
           properties:
-            teachers:
-              type: array
-              items:
-                $ref: '#/components/schemas/UserLite'
+            teacher_id:
+              type: integer
+              example: 1
             labs:
               type: array
               items:
@@ -803,6 +802,7 @@ components:
       required:
         - name
         - description
+        - group_id
       properties:
         name:
           type: string
@@ -810,6 +810,9 @@ components:
         description:
           type: string
           example: "desc1"
+        group_id:
+          type: integer
+          example: 1
     LRUpdateFile:
       type: object
       required:
@@ -865,13 +868,9 @@ components:
     SolutionUpdateDesc:
       type: object
       required:
-        - teacher_id
         - description
         - state
       properties:
-        teacher_id:
-          type: integer
-          example: 1
         description:
           type: string
           example: "description"
@@ -894,13 +893,9 @@ components:
             - user_id
             - user_name
             - state
-            - teacher_id
             - description
           properties:
             lab_id:
-              type: integer
-              example: 1
-            teacher_id:
               type: integer
               example: 1
             description:
