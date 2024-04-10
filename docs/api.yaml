@@ -622,6 +622,15 @@ paths:
 
 
   /solutions/{id}/files:
+    parameters:
+      - in: path
+        name: id
+        description: ID of solution
+        required: true
+        schema:
+          type: integer
+          minimum: 1
+
     patch:
       tags:
         - solution
@@ -638,6 +647,85 @@ paths:
           $ref: '#/components/responses/204'
         400:
           $ref: '#/components/responses/400'
+        404:
+          $ref: '#/components/responses/404'
+        500:
+          $ref: '#/components/responses/500'
+
+  /solutions/{id}/comments:
+    parameters:
+      - in: path
+        name: id
+        description: ID of solution
+        required: true
+        schema:
+          type: integer
+          minimum: 1
+
+    post:
+      tags:
+        - solution
+      security:
+        - bearerAuth: [ ]
+      summary: Add comment to solution
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CommentSore'
+      responses:
+        201:
+          $ref: '#/components/responses/201'
+        500:
+          $ref: '#/components/responses/500'
+
+  /solutions/{id}/comments/{comment_id}:
+    parameters:
+      - in: path
+        name: id
+        description: ID of solution
+        required: true
+        schema:
+          type: integer
+          minimum: 1
+      - in: path
+        name: comment_id
+        description: ID of comment
+        required: true
+        schema:
+          type: integer
+          minimum: 1
+
+    put:
+      tags:
+        - solution
+      security:
+        - bearerAuth: [ ]
+      summary: Update comment of solution
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CommentUpdate'
+      responses:
+        204:
+          $ref: '#/components/responses/204'
+        400:
+          $ref: '#/components/responses/400'
+        404:
+          $ref: '#/components/responses/404'
+        500:
+          $ref: '#/components/responses/500'
+
+    delete:
+      tags:
+        - solution
+      security:
+        - bearerAuth: [ ]
+      summary: Delete comment of solution
+      responses:
+        204:
+          $ref: '#/components/responses/204'
         404:
           $ref: '#/components/responses/404'
         500:
@@ -915,6 +1003,55 @@ components:
       allOf:
         - $ref: '#/components/schemas/SolutionLite'
         - $ref: '#/components/schemas/SolutionFile'
+        - type: object
+          required:
+            - comments
+          properties:
+            comments:
+              type: array
+              items:
+                $ref: '#/components/schemas/Comment'
+
+    Comment:
+      type: object
+      required:
+        - id
+        - user_id
+        - date
+        - text
+      properties:
+        id:
+          type: integer
+          example: 1
+        user_id:
+          type: integer
+          example: 1
+        date:
+          type: string
+          example: "date"
+        text:
+          type: string
+          example: "text"
+    CommentSore:
+      type: object
+      required:
+        - text
+      properties:
+        text:
+          type: string
+          example: "text"
+    CommentUpdate:
+      type: object
+      required:
+        - id
+        - text
+      properties:
+        id:
+          type: integer
+          example: 1
+        text:
+          type: string
+          example: "text"
 
     FileLite:
       type: object
