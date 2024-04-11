@@ -10,7 +10,8 @@ readonly class UserModel
         private string $login,
         private string $password,
         private Role   $role,
-    ) {
+    )
+    {
     }
 
     public function getRole(): Role

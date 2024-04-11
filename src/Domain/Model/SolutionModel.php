@@ -11,6 +11,7 @@ readonly class SolutionModel
      * @param LabModel $lab лабораторная, решение к которой предложено
      * @param UserModel $user студент, отправивший лабораторную
      * @param FileModel[] $files список файлов (отчеты, исходники)
+     * @param CommentModel[] $comments список комментариев
      */
     public function __construct(
         private int $id,
@@ -19,6 +20,7 @@ readonly class SolutionModel
         private LabModel $lab,
         private UserModel $user,
         private array $files,
+        private array $comments,
     ) {
     }
 
@@ -52,5 +54,8 @@ readonly class SolutionModel
         return $this->files;
     }
 
-
+    public function getComments(): array
+    {
+        return $this->comments;
+    }
 }

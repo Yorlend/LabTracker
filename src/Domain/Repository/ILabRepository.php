@@ -2,15 +2,15 @@
 
 namespace App\Domain\Repository;
 
-use App\Domain\Model\FileModel;
 use App\Domain\Model\LabModel;
 
 interface ILabRepository
 {
     /**
+     * @param int|null $groupId id группы, для фильтрации
      * @return LabModel[] Все лабораторные
      */
-    public function getAll(): array;
+    public function getAll(?int $groupId): array;
 
     /**
      * @param int $id
@@ -21,15 +21,13 @@ interface ILabRepository
     /**
      * @param string $name название
      * @param string $description описание
-     * @param string $groupId идентификатор группы
-     * @param FileModel[] $files список файлов
+     * @param int $groupId идентификатор группы
      * @return LabModel
      */
     public function create(
         string $name,
         string $description,
-        string $groupId,
-        array $files,
+        int    $groupId,
     ): LabModel;
 
     /**
@@ -38,7 +36,7 @@ interface ILabRepository
      * @return void
      */
     public function update(
-        int $id,
+        int      $id,
         LabModel $lab,
     ): void;
 
