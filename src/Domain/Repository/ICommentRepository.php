@@ -7,19 +7,13 @@ use App\Domain\Model\CommentModel;
 interface ICommentRepository
 {
     /**
-     * @return CommentModel[] Все комментарии
+     * @param int $solutionId id решения
+     * @param string $text текст комментария
+     * @return CommentModel
      */
-    public function getAll(): array;
-
-    /**
-     * @param int $id
-     * @return CommentModel Результат поиска
-     */
-    public function getById(int $id): CommentModel;
-
-
     public function create(
-
+        int    $solutionId,
+        string $text
     ): CommentModel;
 
     /**
@@ -28,7 +22,7 @@ interface ICommentRepository
      * @return void
      */
     public function update(
-        int $id,
+        int          $id,
         CommentModel $comment,
     ): void;
 

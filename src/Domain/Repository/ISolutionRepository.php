@@ -2,16 +2,17 @@
 
 namespace App\Domain\Repository;
 
-use App\Domain\Model\FileModel;
 use App\Domain\Model\LabState;
 use App\Domain\Model\SolutionModel;
 
 interface ISolutionRepository
 {
     /**
-     * @return SolutionModel[] Все отправленные решения
+     * @param int|null $labId id лабы, для фильтрации
+     * @param LabState|null $state состояние, для фильтрации
+     * @return SolutionModel[] все решения
      */
-    public function getAll(): array;
+    public function getAll(?int $labId, ?LabState $state): array;
 
     /**
      * @param int $id
@@ -25,15 +26,13 @@ interface ISolutionRepository
      * @param LabState $state состояние
      * @param int $labId идентификатор лабораторной
      * @param int $userId идентификатор пользователя
-     * @param FileModel[] $files файлы решения
      * @return SolutionModel
      */
     public function create(
-        string $description,
+        string   $description,
         LabState $state,
-        int $labId,
-        int $userId,
-        array $files,
+        int      $labId,
+        int      $userId,
     ): SolutionModel;
 
     /**
@@ -42,7 +41,7 @@ interface ISolutionRepository
      * @return void
      */
     public function update(
-        int $id,
+        int           $id,
         SolutionModel $solution,
     ): void;
 

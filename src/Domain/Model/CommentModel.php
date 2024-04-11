@@ -7,17 +7,16 @@ readonly class CommentModel
     /**
      * @param int $id
      * @param string $text комментарий
-     * @param int $date дата проверки
-     * @param SolutionModel $solution решение, к которому оставлен коментарий
-     * @param UserModel $reviewer преподаватель
+     * @param string $date дата проверки
+     * @param UserModel $user пользователь, оставивший комментарий
      */
     public function __construct(
-        private int $id,
-        private string $text,
-        private int $date,
-        private SolutionModel $solution,
-        private UserModel $reviewer,
-    ) {
+        private int       $id,
+        private string    $text,
+        private string    $date,
+        private UserModel $user,
+    )
+    {
     }
 
     public function getId(): int
@@ -35,14 +34,9 @@ readonly class CommentModel
         return $this->date;
     }
 
-    public function getSolution(): SolutionModel
+    public function getUser(): UserModel
     {
-        return $this->solution;
-    }
-
-    public function getReviewer(): UserModel
-    {
-        return $this->reviewer;
+        return $this->user;
     }
 
 

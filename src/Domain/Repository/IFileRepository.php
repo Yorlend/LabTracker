@@ -17,15 +17,28 @@ interface IFileRepository
      */
     public function getById(int $id): FileModel;
 
+    /**
+     * @param string $name имя
+     * @param string $path путь
+     * @param int $labId id лабы, к которой относится файл
+     * @return FileModel
+     */
+    public function createForLab(
+        string $name,
+        string $path,
+        int    $labId
+    ): FileModel;
 
     /**
      * @param string $name имя
      * @param string $path путь
+     * @param int $solutionId id решения, к которому относится файл
      * @return FileModel
      */
-    public function create(
+    public function createForSolution(
         string $name,
         string $path,
+        int    $solutionId
     ): FileModel;
 
     /**
@@ -34,7 +47,7 @@ interface IFileRepository
      * @return void
      */
     public function update(
-        int $id,
+        int       $id,
         FileModel $file,
     ): void;
 
@@ -43,4 +56,16 @@ interface IFileRepository
      * @return void
      */
     public function delete(int $id): void;
+
+    /**
+     * @param int $labId id лабы, для которой удаляются файлы
+     * @return void
+     */
+    public function deleteByLabID(int $labId): void;
+
+    /**
+     * @param int $labId id решения, для которого удаляются файлы
+     * @return void
+     */
+    public function deleteBySolutionID(int $labId): void;
 }

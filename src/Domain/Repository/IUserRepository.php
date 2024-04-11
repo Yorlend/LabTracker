@@ -8,9 +8,11 @@ use App\Domain\Model\UserModel;
 interface IUserRepository
 {
     /**
+     * @param int|null $groupId id группы пользователей
+     * @param Role|null $role роль пользователей
      * @return UserModel[] Все пользователи
      */
-    public function getAll(): array;
+    public function getAll(?int $groupId, ?Role $role): array;
 
     /**
      * @param int $id
@@ -29,7 +31,7 @@ interface IUserRepository
         string $userName,
         string $login,
         string $password,
-        Role $role,
+        Role   $role,
     ): UserModel;
 
     /**
@@ -38,7 +40,7 @@ interface IUserRepository
      * @return void
      */
     public function update(
-        int $id,
+        int       $id,
         UserModel $user,
     ): void;
 
