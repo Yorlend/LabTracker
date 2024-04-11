@@ -41,7 +41,7 @@ class LabService
         foreach ($files as $path) {
             $nodes = explode('/', $path);
             $name = end($nodes);
-            $this->fileRepository->createForLab($name, $path, $labId);
+            $this->fileRepository->createForLab($name, $labId);
         }
         $this->fileStorage->save($groupId, $labId, $files);
 
@@ -99,8 +99,20 @@ class LabService
         foreach ($files as $path) {
             $nodes = explode('/', $path);
             $name = end($nodes);
-            $this->fileRepository->createForLab($name, $path, $id);
+            $this->fileRepository->createForLab($name, $id);
         }
         $this->fileStorage->save($groupId, $id, $files);
+    }
+
+    /**
+     * @param int $id id лабы
+     * @param string $name имя файла
+     * @return string путь к файлу
+     */
+    public function getFile(int $id, string $name): string
+    {
+        $groupID = $this->repository->getById($id)->getGroup()->getId();
+
+        return $this->fileStorage->getFilePath($groupID, $id, $name);
     }
 }

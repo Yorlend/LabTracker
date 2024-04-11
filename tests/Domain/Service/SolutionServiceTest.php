@@ -35,12 +35,12 @@ class SolutionServiceTest extends TestCase
                     new UserModel(3, 'name3', 'login3', 'pass3', Role::Teacher),
                 ),
                 [
-                    new FileModel(1, 'name1', $files[0])
+                    new FileModel(1, 'name1')
                 ]),
             new UserModel(1, 'name1', 'login1', 'pass1', Role::Student),
             [
-                new FileModel(1, 'name1', 'path1'),
-                new FileModel(2, 'name2', 'path2'),
+                new FileModel(1, 'name1'),
+                new FileModel(2, 'name2'),
             ],
             [
                 new CommentModel(
@@ -67,11 +67,11 @@ class SolutionServiceTest extends TestCase
         $mockFIleRepo
             ->expects($this->once())
             ->method('createForSolution')
-            ->with('name1', $files[0], $expected->getId())
+            ->with('name1', $expected->getId())
             ->willReturn($expected->getFiles()[0]);
 
         $mockStorage = $this->getMockBuilder('App\Domain\Storage\ISolutionFileStorage')
-            ->onlyMethods(array('save', 'clearSolutionFiles'))
+            ->onlyMethods(array('save', 'clearSolutionFiles', 'getFilePath'))
             ->getMock();
         $mockStorage
             ->expects($this->once())
@@ -104,13 +104,13 @@ class SolutionServiceTest extends TestCase
                     new UserModel(3, 'name3', 'login3', 'pass3', Role::Teacher),
                 ),
                 [
-                    new FileModel(1, 'name1', 'path1'),
-                    new FileModel(2, 'name2', 'path2'),
+                    new FileModel(1, 'name1'),
+                    new FileModel(2, 'name2'),
                 ]),
             new UserModel(1, 'name1', 'login1', 'pass1', Role::Student),
             [
-                new FileModel(1, 'name1', 'path1'),
-                new FileModel(2, 'name2', 'path2'),
+                new FileModel(1, 'name1'),
+                new FileModel(2, 'name2'),
             ],
             [
                 new CommentModel(
@@ -135,7 +135,7 @@ class SolutionServiceTest extends TestCase
             ->getMock();
 
         $mockStorage = $this->getMockBuilder('App\Domain\Storage\ISolutionFileStorage')
-            ->onlyMethods(array('save', 'clearSolutionFiles'))
+            ->onlyMethods(array('save', 'clearSolutionFiles', 'getFilePath'))
             ->getMock();
 
         $service = new SolutionService($mockRepo, $mockFIleRepo, $mockStorage);
@@ -164,13 +164,13 @@ class SolutionServiceTest extends TestCase
                     new UserModel(3, 'name3', 'login3', 'pass3', Role::Teacher),
                 ),
                 [
-                    new FileModel(1, 'name1', 'path1'),
-                    new FileModel(2, 'name2', 'path2'),
+                    new FileModel(1, 'name1'),
+                    new FileModel(2, 'name2'),
                 ]),
             new UserModel(1, 'name1', 'login1', 'pass1', Role::Student),
             [
-                new FileModel(1, 'name1', 'path1'),
-                new FileModel(2, 'name2', 'path2'),
+                new FileModel(1, 'name1'),
+                new FileModel(2, 'name2'),
             ],
             [
                 new CommentModel(
@@ -196,7 +196,7 @@ class SolutionServiceTest extends TestCase
             ->getMock();
 
         $mockStorage = $this->getMockBuilder('App\Domain\Storage\ISolutionFileStorage')
-            ->onlyMethods(array('save', 'clearSolutionFiles'))
+            ->onlyMethods(array('save', 'clearSolutionFiles', 'getFilePath'))
             ->getMock();
 
         $service = new SolutionService($mockRepo, $mockFIleRepo, $mockStorage);
@@ -221,7 +221,7 @@ class SolutionServiceTest extends TestCase
             ->getMock();
 
         $mockStorage = $this->getMockBuilder('App\Domain\Storage\ISolutionFileStorage')
-            ->onlyMethods(array('save', 'clearSolutionFiles'))
+            ->onlyMethods(array('save', 'clearSolutionFiles', 'getFilePath'))
             ->getMock();
 
         $service = new SolutionService($mockRepo, $mockFIleRepo, $mockStorage);
@@ -248,13 +248,13 @@ class SolutionServiceTest extends TestCase
                     new UserModel(3, 'name3', 'login3', 'pass3', Role::Teacher),
                 ),
                 [
-                    new FileModel(1, 'name1', 'path1'),
-                    new FileModel(2, 'name2', 'path2'),
+                    new FileModel(1, 'name1'),
+                    new FileModel(2, 'name2'),
                 ]),
             new UserModel(1, 'name1', 'login1', 'pass1', Role::Student),
             [
-                new FileModel(1, 'name1', 'path1'),
-                new FileModel(2, 'name2', 'path2'),
+                new FileModel(1, 'name1'),
+                new FileModel(2, 'name2'),
             ],
             [
                 new CommentModel(
@@ -279,7 +279,7 @@ class SolutionServiceTest extends TestCase
             ->getMock();
 
         $mockStorage = $this->getMockBuilder('App\Domain\Storage\ISolutionFileStorage')
-            ->onlyMethods(array('save', 'clearSolutionFiles'))
+            ->onlyMethods(array('save', 'clearSolutionFiles', 'getFilePath'))
             ->getMock();
 
         $service = new SolutionService($mockRepo, $mockFIleRepo, $mockStorage);
@@ -307,12 +307,12 @@ class SolutionServiceTest extends TestCase
                     new UserModel(3, 'name3', 'login3', 'pass3', Role::Teacher),
                 ),
                 [
-                    new FileModel(1, 'name1', $files[0])
+                    new FileModel(1, 'name1')
                 ]),
             new UserModel(1, 'name1', 'login1', 'pass1', Role::Student),
             [
-                new FileModel(1, 'name1', 'path1'),
-                new FileModel(2, 'name2', 'path2'),
+                new FileModel(1, 'name1'),
+                new FileModel(2, 'name2'),
             ],
             [
                 new CommentModel(
@@ -343,11 +343,11 @@ class SolutionServiceTest extends TestCase
         $mockFIleRepo
             ->expects($this->once())
             ->method('createForSolution')
-            ->with('name1', $files[0], $model->getId())
+            ->with('name1', $model->getId())
             ->willReturn($model->getFiles()[0]);
 
         $mockStorage = $this->getMockBuilder('App\Domain\Storage\ISolutionFileStorage')
-            ->onlyMethods(array('save', 'clearSolutionFiles'))
+            ->onlyMethods(array('save', 'clearSolutionFiles', 'getFilePath'))
             ->getMock();
         $mockStorage
             ->expects($this->once())
@@ -361,5 +361,72 @@ class SolutionServiceTest extends TestCase
         $service = new SolutionService($mockRepo, $mockFIleRepo, $mockStorage);
 
         $service->updateFiles($model->getId(), $files);
+    }
+
+    public function testGetFiles(): void
+    {
+        $model = new SolutionModel(
+            1,
+            'desc',
+            LabState::Checking,
+            new LabModel(
+                1,
+                'name',
+                'desc',
+                new GroupModel(
+                    1,
+                    [
+                        new UserModel(1, 'name1', 'login1', 'pass1', Role::Student),
+                        new UserModel(2, 'name2', 'login2', 'pass2', Role::Student),
+                    ],
+                    new UserModel(3, 'name3', 'login3', 'pass3', Role::Teacher),
+                ),
+                [
+                    new FileModel(1, 'name1'),
+                    new FileModel(2, 'name2'),
+                ]),
+            new UserModel(1, 'name1', 'login1', 'pass1', Role::Student),
+            [
+                new FileModel(1, 'name1'),
+                new FileModel(2, 'name2'),
+            ],
+            [
+                new CommentModel(
+                    1,
+                    'text',
+                    'now',
+                    new UserModel(1, 'name', 'login', 'pass', Role::Administrator)
+                )
+            ]
+        );
+        $expected = 'path';
+
+        $mockRepo = $this->getMockBuilder('App\Domain\Repository\ISolutionRepository')
+            ->onlyMethods(array('getAll', 'getById', 'create', 'update', 'delete'))
+            ->getMock();
+        $mockRepo
+            ->expects($this->once())
+            ->method('getById')
+            ->with(1)
+            ->willReturn($model);
+
+        $mockFIleRepo = $this->getMockBuilder('App\Domain\Repository\IFileRepository')
+            ->onlyMethods(array('getAll', 'getById', 'createForLab', 'createForSolution', 'update', 'delete', 'deleteByLabID', 'deleteBySolutionID'))
+            ->getMock();
+
+        $mockStorage = $this->getMockBuilder('App\Domain\Storage\ISolutionFileStorage')
+            ->onlyMethods(array('save', 'clearSolutionFiles', 'getFilePath'))
+            ->getMock();
+        $mockStorage
+            ->expects($this->once())
+            ->method('getFilePath')
+            ->with($model->getLab()->getId(), $model->getId(), $model->getFiles()[0]->getName())
+            ->willReturn($expected);
+
+        $service = new SolutionService($mockRepo, $mockFIleRepo, $mockStorage);
+
+        $actual = $service->getFile($model->getId(), $model->getFiles()[0]->getName());
+
+        $this->assertSame($expected, $actual);
     }
 }

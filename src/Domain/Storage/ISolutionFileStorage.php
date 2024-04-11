@@ -18,4 +18,12 @@ interface ISolutionFileStorage
      * @return void
      */
     public function clearSolutionFiles(int $labId, int $solutionId): void;
+
+    /**
+     * @param int $labId id группы
+     * @param int $solutionId id решения
+     * @param string $name имя файла
+     * @return string путь к файлу
+     */
+    public function getFilePath(int $labId, int $solutionId, string $name): string;
 }
