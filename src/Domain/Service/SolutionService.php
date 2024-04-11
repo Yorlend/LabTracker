@@ -7,7 +7,6 @@ use App\Domain\Model\SolutionModel;
 use App\Domain\Repository\IFileRepository;
 use App\Domain\Repository\ISolutionRepository;
 use App\Domain\Storage\ISolutionFileStorage;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class SolutionService
 {
@@ -45,7 +44,7 @@ class SolutionService
         foreach ($files as $path) {
             $nodes = explode('/', $path);
             $name = end($nodes);
-            $this->fileRepository->createForSolution($name, $path, $solutionId);
+            $this->fileRepository->createForSolution($name, $solutionId);
         }
         $this->fileStorage->save($labId, $solutionId, $files);
 
@@ -104,9 +103,21 @@ class SolutionService
         foreach ($files as $path) {
             $nodes = explode('/', $path);
             $name = end($nodes);
-            $this->fileRepository->createForSolution($name, $path, $id);
+            $this->fileRepository->createForSolution($name, $id);
         }
         $this->fileStorage->save($labId, $id, $files);
+    }
+
+    /**
+     * @param int $id id решения
+     * @param string $name имя файла
+     * @return string путь к файлу
+     */
+    public function getFile(int $id, string $name): string
+    {
+        $labId = $this->repository->getById($id)->getLab()->getId();
+
+        return $this->fileStorage->getFilePath($labId, $id, $name);
     }
 
 }

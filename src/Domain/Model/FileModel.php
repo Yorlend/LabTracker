@@ -7,13 +7,16 @@ readonly class FileModel
     /**
      * @param int $id
      * @param string $name Название файла
-     * @param string $path Путь к файлу
+     * @param int|null $labId id лабы, которой принадлежит файл
+     * @param int|null $solutionId id решения, которому принадлежит файл
      */
     public function __construct(
-        private int $id,
+        private int    $id,
         private string $name,
-        private string $path,
-    ) {
+        private ?int   $labId = null,
+        private ?int   $solutionId = null,
+    )
+    {
     }
 
     public function getId(): int
@@ -26,8 +29,13 @@ readonly class FileModel
         return $this->name;
     }
 
-    public function getPath(): string
+    public function getLabId(): ?int
     {
-        return $this->path;
+        return $this->labId;
+    }
+
+    public function getSolutionId(): ?int
+    {
+        return $this->solutionId;
     }
 }

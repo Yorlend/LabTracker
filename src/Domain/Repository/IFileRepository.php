@@ -19,25 +19,21 @@ interface IFileRepository
 
     /**
      * @param string $name имя
-     * @param string $path путь
      * @param int $labId id лабы, к которой относится файл
      * @return FileModel
      */
     public function createForLab(
         string $name,
-        string $path,
-        int    $labId
+        int   $labId,
     ): FileModel;
 
     /**
      * @param string $name имя
-     * @param string $path путь
      * @param int $solutionId id решения, к которому относится файл
      * @return FileModel
      */
     public function createForSolution(
         string $name,
-        string $path,
         int    $solutionId
     ): FileModel;
 

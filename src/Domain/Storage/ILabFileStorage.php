@@ -18,4 +18,12 @@ interface ILabFileStorage
      * @return void
      */
     public function clearLabFiles(int $groupID, int $labId): void;
+
+    /**
+     * @param int $groupID id лабы
+     * @param int $labId id группы
+     * @param string $name имя файла
+     * @return string путь к файлу
+     */
+    public function getFilePath(int $groupID, int $labId, string $name): string;
 }
