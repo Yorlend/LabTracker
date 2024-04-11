@@ -6,7 +6,7 @@ use App\Domain\Model\LabState;
 use App\Domain\Model\SolutionModel;
 use App\Domain\Repository\IFileRepository;
 use App\Domain\Repository\ISolutionRepository;
-use Symfony\Component\Filesystem\Filesystem;
+use App\Domain\Storage\ISolutionFileStorage;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class SolutionService
@@ -14,12 +14,12 @@ class SolutionService
     /**
      * @param ISolutionRepository $repository репозиторий решений
      * @param IFileRepository $fileRepository репозиторий файлов
-     * @param Filesystem $fs файловая система
+     * @param ISolutionFileStorage $fileStorage хранилище файлов
      */
     public function __construct(
-        private readonly ISolutionRepository $repository,
-//        private readonly IFileRepository     $fileRepository,
-//        private readonly Filesystem          $fs
+        private readonly ISolutionRepository  $repository,
+        private readonly IFileRepository      $fileRepository,
+        private readonly ISolutionFileStorage $fileStorage
     )
     {
     }
@@ -29,7 +29,7 @@ class SolutionService
      * @param LabState $state состояние
      * @param int $labId идентификатор лабораторной
      * @param int $userId идентификатор пользователя
-     * @param UploadedFile[] $files файлы
+     * @param string[] $files файлы
      * @return int id созданного решения
      */
     public function create(
@@ -40,17 +40,16 @@ class SolutionService
         array    $files,
     ): int
     {
-//        $solutionId = $this->repository->create($description, $state, $labId, $userId)->getId();
-//
-//        $dirName = $this->getDirName($labId, $solutionId);
-//        $this->fs->mkdir($dirName);
-//        foreach ($files as $file) {
-//            $this->fileRepository->createForSolution($file->getClientOriginalName(), $dirName, $solutionId);
-//            $file->move($dirName);
-//        }
-//
-//        return $solutionId;
-        return 1;
+        $solutionId = $this->repository->create($description, $state, $labId, $userId)->getId();
+
+        foreach ($files as $path) {
+            $nodes = explode('/', $path);
+            $name = end($nodes);
+            $this->fileRepository->createForSolution($name, $path, $solutionId);
+        }
+        $this->fileStorage->save($labId, $solutionId, $files);
+
+        return $solutionId;
     }
 
     /**
@@ -93,22 +92,21 @@ class SolutionService
 
     /**
      * @param int $id id решения
-     * @param UploadedFile[] $files файлы
+     * @param string[] $files файлы
      * @return void
      */
     public function updateFiles(int $id, array $files): void
     {
-//        $labId = $this->repository->getById($id)->getLab()->getId();
-//        $dirName = $this->getDirName($labId, $id);
-//
-//        $this->fs->remove($dirName);
-//        $this->fileRepository->deleteBySolutionID($id);
-//
-//        $this->fs->mkdir($dirName);
-//        foreach ($files as $file) {
-//            $this->fileRepository->createForSolution($file->getClientOriginalName(), $dirName, $id);
-//            $file->move($dirName);
-//        }
+        $labId = $this->repository->getById($id)->getLab()->getId();
+        $this->fileStorage->clearSolutionFiles($labId, $id);
+        $this->fileRepository->deleteBySolutionID($id);
+
+        foreach ($files as $path) {
+            $nodes = explode('/', $path);
+            $name = end($nodes);
+            $this->fileRepository->createForSolution($name, $path, $id);
+        }
+        $this->fileStorage->save($labId, $id, $files);
     }
 
 }

@@ -5,16 +5,19 @@ namespace App\Domain\Service;
 use App\Domain\Model\LabModel;
 use App\Domain\Repository\IFileRepository;
 use App\Domain\Repository\ILabRepository;
+use App\Domain\Storage\ILabFileStorage;
+
 class LabService
 {
     /**
      * @param ILabRepository $repository репозиторий лаб
      * @param IFileRepository $fileRepository репозиторий файлов
+     * @param ILabFileStorage $fileStorage хранилище файлов
      */
     public function __construct(
         private readonly ILabRepository  $repository,
-//        private readonly IFileRepository $fileRepository,
-//        private readonly ILabFileStorage $fileStorage,
+        private readonly IFileRepository $fileRepository,
+        private readonly ILabFileStorage $fileStorage,
     )
     {
     }
@@ -33,17 +36,16 @@ class LabService
         array  $files,
     ): int
     {
-//        $labId = $this->repository->create($name, $description, $groupId)->getId();
-//
-//        foreach ($files as $path) {
-//            $nodes = explode('/', $path);
-//            $name = end($nodes);
-//            $this->fileRepository->createForLab($name,$dirName . $name, $labId);
-//        }
-//        $this->fileStorage->s
-//
-//        return $labId;
-        return 1;
+        $labId = $this->repository->create($name, $description, $groupId)->getId();
+
+        foreach ($files as $path) {
+            $nodes = explode('/', $path);
+            $name = end($nodes);
+            $this->fileRepository->createForLab($name, $path, $labId);
+        }
+        $this->fileStorage->save($groupId, $labId, $files);
+
+        return $labId;
     }
 
     /**
@@ -90,19 +92,15 @@ class LabService
      */
     public function updateFiles(int $id, array $files): void
     {
-//        $groupId = $this->repository->getById($id)->getGroup()->getId();
-//        $dirName = $this->getDirName($groupId, $id);
-//
-//        $this->deleteDirectory($dirName);
-//        $this->fileRepository->deleteByLabID($id);
-//
-//
-//        mkdir($dirName);
-//        foreach ($files as $path) {
-//            $nodes = explode('/', $path);
-//            $name = end($nodes);
-//            $this->fileRepository->createForLab($name, $path, $id);
-//            copy($path, $dirName . $name);
-//        }
+        $groupId = $this->repository->getById($id)->getGroup()->getId();
+        $this->fileStorage->clearLabFiles($groupId, $id);
+        $this->fileRepository->deleteByLabID($id);
+
+        foreach ($files as $path) {
+            $nodes = explode('/', $path);
+            $name = end($nodes);
+            $this->fileRepository->createForLab($name, $path, $id);
+        }
+        $this->fileStorage->save($groupId, $id, $files);
     }
 }
