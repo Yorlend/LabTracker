@@ -18,8 +18,6 @@ tags:
     description: Laboratory work routes
   - name: solution
     description: Laboratory work solution routes
-  - name: file
-    description: File routes
 
 paths:
   /auth/login:
@@ -503,7 +501,7 @@ paths:
         500:
           $ref: '#/components/responses/500'
 
-  /labs/{id}/file:
+  /labs/{id}/files:
     patch:
       tags:
         - lab
@@ -518,6 +516,43 @@ paths:
       responses:
         204:
           $ref: '#/components/responses/204'
+        400:
+          $ref: '#/components/responses/400'
+        404:
+          $ref: '#/components/responses/404'
+        500:
+          $ref: '#/components/responses/500'
+
+  /labs/{id}/files/{file_id}:
+    parameters:
+      - in: path
+        name: id
+        description: ID of lab
+        required: true
+        schema:
+          type: integer
+          minimum: 1
+      - in: path
+        name: file_id
+        description: ID of file
+        required: true
+        schema:
+          type: integer
+          minimum: 1
+
+    get:
+      tags:
+        - lab
+      security:
+        - cookieAuth: [ ]
+      summary: Download file
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/File'
         400:
           $ref: '#/components/responses/400'
         404:
@@ -671,6 +706,43 @@ paths:
         500:
           $ref: '#/components/responses/500'
 
+  /solutions/{id}/files/{file_id}:
+    parameters:
+      - in: path
+        name: id
+        description: ID of solution
+        required: true
+        schema:
+          type: integer
+          minimum: 1
+      - in: path
+        name: file_id
+        description: ID of file
+        required: true
+        schema:
+          type: integer
+          minimum: 1
+
+    get:
+      tags:
+        - solution
+      security:
+        - cookieAuth: [ ]
+      summary: Download file
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/File'
+        400:
+          $ref: '#/components/responses/400'
+        404:
+          $ref: '#/components/responses/404'
+        500:
+          $ref: '#/components/responses/500'
+
   /solutions/{id}/comments:
     parameters:
       - in: path
@@ -745,36 +817,6 @@ paths:
       responses:
         204:
           $ref: '#/components/responses/204'
-        404:
-          $ref: '#/components/responses/404'
-        500:
-          $ref: '#/components/responses/500'
-
-  /files/{id}:
-    parameters:
-      - in: path
-        name: id
-        description: ID of file
-        required: true
-        schema:
-          type: integer
-          minimum: 1
-
-    get:
-      tags:
-        - file
-      security:
-        - cookieAuth: [ ]
-      summary: Get file
-      responses:
-        200:
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/File'
-        400:
-          $ref: '#/components/responses/400'
         404:
           $ref: '#/components/responses/404'
         500:
