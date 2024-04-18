@@ -18,12 +18,12 @@ jobs:
       - name: Собрать зависимости проекта
         run: docker compose exec php composer install
 
-      - name: Загрузить зависимости как артефакт проекта
-        uses: actions/upload-artifact@v4
-        with:
-          name: composer-vendor
-          path: vendor
-          retention-days: 1
+      # - name: Загрузить зависимости как артефакт проекта
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: composer-vendor
+      #     path: vendor
+      #     retention-days: 1
 
   test:
 
@@ -41,14 +41,17 @@ jobs:
           compose-file: "compose.test.yml"
           services: php
         
-      - name: Скачать зависимости как артефакт проекта
-        uses: actions/download-artifact@v4
-        with:
-          name: composer-vendor
-          path: vendor
 
-      - name: Восстановить права артефактов
-        run: chmod +x vendor/bin/*
+      - name: Собрать зависимости проекта
+        run: docker compose exec php composer install
+      # - name: Скачать зависимости как артефакт проекта
+      #   uses: actions/download-artifact@v4
+      #   with:
+      #     name: composer-vendor
+      #     path: vendor
+
+      # - name: Восстановить права артефактов
+      #   run: chmod +x vendor/bin/*
         
       - name: Запуск тестов
         run: docker compose exec php composer exec phpunit
