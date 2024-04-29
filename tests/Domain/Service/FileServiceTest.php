@@ -13,7 +13,7 @@ class FileServiceTest extends TestCase
         $model = new FileModel(1, 'name1', 'path1');
 
         $mockFIleRepo = $this->getMockBuilder('App\Domain\Repository\IFileRepository')
-            ->onlyMethods(array('getAll', 'getById', 'createForLab', 'createForSolution', 'update', 'delete', 'deleteByLabID', 'deleteBySolutionID'))
+            ->onlyMethods(array('getById', 'createForLab', 'createForSolution','deleteByLabID', 'deleteBySolutionID'))
             ->getMock();
         $mockFIleRepo
             ->expects($this->once())

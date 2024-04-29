@@ -33,7 +33,7 @@ class LabServiceTest extends TestCase
             ->willReturn($expected);
 
         $mockFIleRepo = $this->getMockBuilder('App\Domain\Repository\IFileRepository')
-            ->onlyMethods(array('getAll', 'getById', 'createForLab', 'createForSolution', 'update', 'delete', 'deleteByLabID', 'deleteBySolutionID'))
+            ->onlyMethods(array('getById', 'createForLab', 'createForSolution','deleteByLabID', 'deleteBySolutionID'))
             ->getMock();
 
         $mockStorage = $this->getMockBuilder('App\Domain\Storage\ILabFileStorage')
@@ -69,7 +69,7 @@ class LabServiceTest extends TestCase
             ->willReturn($expected);
 
         $mockFIleRepo = $this->getMockBuilder('App\Domain\Repository\IFileRepository')
-            ->onlyMethods(array('getAll', 'getById', 'createForLab', 'createForSolution', 'update', 'delete', 'deleteByLabID', 'deleteBySolutionID'))
+            ->onlyMethods(array('getById', 'createForLab', 'createForSolution','deleteByLabID', 'deleteBySolutionID'))
             ->getMock();
 
         $mockStorage = $this->getMockBuilder('App\Domain\Storage\ILabFileStorage')
@@ -106,7 +106,7 @@ class LabServiceTest extends TestCase
             ->willReturn($expected);
 
         $mockFIleRepo = $this->getMockBuilder('App\Domain\Repository\IFileRepository')
-            ->onlyMethods(array('getAll', 'getById', 'createForLab', 'createForSolution', 'update', 'delete', 'deleteByLabID', 'deleteBySolutionID'))
+            ->onlyMethods(array('getById', 'createForLab', 'createForSolution','deleteByLabID', 'deleteBySolutionID'))
             ->getMock();
 
         $mockStorage = $this->getMockBuilder('App\Domain\Storage\ILabFileStorage')
@@ -131,7 +131,7 @@ class LabServiceTest extends TestCase
             ->with(1);
 
         $mockFIleRepo = $this->getMockBuilder('App\Domain\Repository\IFileRepository')
-            ->onlyMethods(array('getAll', 'getById', 'createForLab', 'createForSolution', 'update', 'delete', 'deleteByLabID', 'deleteBySolutionID'))
+            ->onlyMethods(array('getById', 'createForLab', 'createForSolution','deleteByLabID', 'deleteBySolutionID'))
             ->getMock();
 
         $mockStorage = $this->getMockBuilder('App\Domain\Storage\ILabFileStorage')
@@ -165,7 +165,7 @@ class LabServiceTest extends TestCase
             ->with(1, 'name', 'desc', 1);
 
         $mockFIleRepo = $this->getMockBuilder('App\Domain\Repository\IFileRepository')
-            ->onlyMethods(array('getAll', 'getById', 'createForLab', 'createForSolution', 'update', 'delete', 'deleteByLabID', 'deleteBySolutionID'))
+            ->onlyMethods(array('getById', 'createForLab', 'createForSolution','deleteByLabID', 'deleteBySolutionID'))
             ->getMock();
 
         $mockStorage = $this->getMockBuilder('App\Domain\Storage\ILabFileStorage')
@@ -199,7 +199,7 @@ class LabServiceTest extends TestCase
 
         $constPath = "pathcnst";
         $mockFIleRepo = $this->getMockBuilder('App\Domain\Repository\IFileRepository')
-            ->onlyMethods(array('getAll', 'getById', 'createForLab', 'createForSolution', 'update', 'delete', 'deleteByLabID', 'deleteBySolutionID'))
+            ->onlyMethods(array('getById', 'createForLab', 'createForSolution','deleteByLabID', 'deleteBySolutionID'))
             ->getMock();
         $mockFIleRepo
             ->expects($this->once())
