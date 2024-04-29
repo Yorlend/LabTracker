@@ -4,62 +4,59 @@ namespace App\Domain\Repository;
 
 use App\Domain\Model\FileModel;
 
+/**
+ * Интерфейс репозитория дескрипторов файлов
+ */
 interface IFileRepository
 {
-    /**
-     * @return FileModel[] Все файлы
-     */
-    public function getAll(): array;
 
     /**
+     * Получить дескриптор по id
+     *
      * @param int $id
      * @return FileModel Результат поиска
      */
     public function getById(int $id): FileModel;
 
     /**
+     * Создать дескриптор для лабы
+     *
+     * @param string $path путь к файлу
      * @param string $name имя
      * @param int $labId id лабы, к которой относится файл
      * @return FileModel
      */
     public function createForLab(
+        string $path,
         string $name,
-        int   $labId,
+        int    $labId,
     ): FileModel;
 
     /**
+     * Создать дескриптор для решения
+     *
+     * @param string $path путь к файлу
      * @param string $name имя
      * @param int $solutionId id решения, к которому относится файл
      * @return FileModel
      */
     public function createForSolution(
+        string $path,
         string $name,
-        int    $solutionId
+        int    $solutionId,
     ): FileModel;
 
     /**
-     * @param int $id
-     * @param FileModel $file обновленный файл
-     * @return void
-     */
-    public function update(
-        int       $id,
-        FileModel $file,
-    ): void;
-
-    /**
-     * @param int $id
-     * @return void
-     */
-    public function delete(int $id): void;
-
-    /**
+     * Удалить все дескрипторы лабы
+     *
      * @param int $labId id лабы, для которой удаляются файлы
      * @return void
      */
     public function deleteByLabID(int $labId): void;
 
     /**
+     * Удалить все дескрипторы решения
+     *
      * @param int $labId id решения, для которого удаляются файлы
      * @return void
      */

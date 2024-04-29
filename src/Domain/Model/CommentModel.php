@@ -2,6 +2,9 @@
 
 namespace App\Domain\Model;
 
+/**
+ *  Сущность комментария
+ */
 readonly class CommentModel
 {
     /**
@@ -19,21 +22,33 @@ readonly class CommentModel
     {
     }
 
+    /**
+     * @return int id
+     */
     public function getId(): int
     {
         return $this->id;
     }
 
+    /**
+     * @return string текст
+     */
     public function getText(): string
     {
         return $this->text;
     }
 
-    public function getDate(): int
+    /**
+     * @return string дата
+     */
+    public function getDate(): string
     {
         return $this->date;
     }
 
+    /**
+     * @return UserModel создатель комментария
+     */
     public function getUser(): UserModel
     {
         return $this->user;

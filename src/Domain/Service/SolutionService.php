@@ -2,12 +2,16 @@
 
 namespace App\Domain\Service;
 
-use App\Domain\Model\LabState;
+use App\Domain\Model\FileModel;
 use App\Domain\Model\SolutionModel;
+use App\Domain\Model\SolutionState;
 use App\Domain\Repository\IFileRepository;
 use App\Domain\Repository\ISolutionRepository;
 use App\Domain\Storage\ISolutionFileStorage;
 
+/**
+ * Сервис для работы с решениями
+ */
 class SolutionService
 {
     /**
@@ -24,44 +28,39 @@ class SolutionService
     }
 
     /**
+     * Создать решение
+     *
      * @param string $description описание
-     * @param LabState $state состояние
+     * @param SolutionState $state состояние
      * @param int $labId идентификатор лабораторной
      * @param int $userId идентификатор пользователя
-     * @param string[] $files файлы
      * @return int id созданного решения
      */
     public function create(
-        string   $description,
-        LabState $state,
-        int      $labId,
-        int      $userId,
-        array    $files,
+        string        $description,
+        SolutionState $state,
+        int           $labId,
+        int           $userId,
     ): int
     {
-        $solutionId = $this->repository->create($description, $state, $labId, $userId)->getId();
-
-        foreach ($files as $path) {
-            $nodes = explode('/', $path);
-            $name = end($nodes);
-            $this->fileRepository->createForSolution($name, $solutionId);
-        }
-        $this->fileStorage->save($labId, $solutionId, $files);
-
-        return $solutionId;
+        return $this->repository->create($description, $state, $labId, $userId)->getId();
     }
 
     /**
+     * Получить все решения
+     *
      * @param int|null $labId id лабы, для фильтрации
-     * @param LabState|null $state состояние, для фильтрации
+     * @param SolutionState|null $state состояние, для фильтрации
      * @return SolutionModel[] все решения
      */
-    public function getAll(?int $labId = null, ?LabState $state = null): array
+    public function getAll(?int $labId = null, ?SolutionState $state = null): array
     {
         return $this->repository->getAll($labId, $state);
     }
 
     /**
+     * Получить решение по id
+     *
      * @param int $id id решения
      * @return SolutionModel искомое решение
      */
@@ -71,6 +70,8 @@ class SolutionService
     }
 
     /**
+     * Удалить решение
+     *
      * @param int $id id htitybz
      * @return void
      */
@@ -80,44 +81,35 @@ class SolutionService
     }
 
     /**
+     * Обновить решение
+     *
      * @param int $id id лабы
-     * @param SolutionModel $solution
+     * @param string $description описание
+     * @param SolutionState $state состояние
      * @return void
      */
-    public function update(int $id, SolutionModel $solution): void
+    public function update(int $id, string $description, SolutionState $state): void
     {
-        $this->repository->update($id, $solution);
+        $this->repository->update($id, $description, $state);
     }
 
     /**
+     * Обновить файлы решения
+     *
      * @param int $id id решения
-     * @param string[] $files файлы
+     * @param FileModel[] $files дескрипторы файлов во временном хранилище
      * @return void
      */
     public function updateFiles(int $id, array $files): void
     {
-        $labId = $this->repository->getById($id)->getLab()->getId();
+        $labId = $this->repository->getById($id)->getLabId();
         $this->fileStorage->clearSolutionFiles($labId, $id);
         $this->fileRepository->deleteBySolutionID($id);
 
-        foreach ($files as $path) {
-            $nodes = explode('/', $path);
-            $name = end($nodes);
-            $this->fileRepository->createForSolution($name, $id);
+        foreach ($files as $file) {
+            $constPath = $this->fileStorage->save($labId, $id, $file);
+            $this->fileRepository->createForSolution($constPath, $file->getName(), $id);
         }
-        $this->fileStorage->save($labId, $id, $files);
-    }
-
-    /**
-     * @param int $id id решения
-     * @param string $name имя файла
-     * @return string путь к файлу
-     */
-    public function getFile(int $id, string $name): string
-    {
-        $labId = $this->repository->getById($id)->getLab()->getId();
-
-        return $this->fileStorage->getFilePath($labId, $id, $name);
     }
 
 }

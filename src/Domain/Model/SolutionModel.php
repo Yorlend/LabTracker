@@ -2,60 +2,75 @@
 
 namespace App\Domain\Model;
 
+/**
+ * Сущность решения
+ */
 readonly class SolutionModel
 {
     /**
-     * @param int $id
+     * @param int $id id решения
      * @param string $description описание решения
-     * @param LabState $state статус решения
-     * @param LabModel $lab лабораторная, решение к которой предложено
-     * @param UserModel $user студент, отправивший лабораторную
-     * @param FileModel[] $files список файлов (отчеты, исходники)
-     * @param CommentModel[] $comments список комментариев
+     * @param SolutionState $state статус решения
+     * @param int $labId id лабы
+     * @param UserModel $user пользователь, загрузивший решение
+     * @param FileModel[] $files дескрипторы связанных файлов
      */
     public function __construct(
-        private int $id,
-        private string $description,
-        private LabState $state,
-        private LabModel $lab,
-        private UserModel $user,
-        private array $files,
-        private array $comments,
-    ) {
+        private int           $id,
+        private string        $description,
+        private SolutionState $state,
+        private int           $labId,
+        private UserModel     $user,
+        private array         $files,
+    )
+    {
     }
 
+    /**
+     * @return int id решения
+     */
     public function getId(): int
     {
         return $this->id;
     }
 
+    /**
+     * @return string описание решения
+     */
     public function getDescription(): string
     {
         return $this->description;
     }
 
-    public function getState(): LabState
+    /**
+     * @return SolutionState статус решения
+     */
+    public function getState(): SolutionState
     {
         return $this->state;
     }
 
-    public function getLab(): LabModel
+    /**
+     * @return int id лабы
+     */
+    public function getLabId(): int
     {
-        return $this->lab;
+        return $this->labId;
     }
 
+    /**
+     * @return UserModel пользователь, загрузивший решение
+     */
     public function getUser(): UserModel
     {
         return $this->user;
     }
 
+    /**
+     * @return FileModel[] дескрипторы связанных файлов
+     */
     public function getFiles(): array
     {
         return $this->files;
-    }
-
-    public function getComments(): array
-    {
-        return $this->comments;
     }
 }

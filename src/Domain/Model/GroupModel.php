@@ -2,34 +2,56 @@
 
 namespace App\Domain\Model;
 
+/**
+ * Сущность группы
+ */
 readonly class GroupModel
 {
     /**
-     * @param int $id
-     * @param UserModel[] $users Студенты в группе
-     * @param UserModel $teacher Ответственный преподаватель
+     * @param int $id Id группы
+     * @param string $name Имя группы
+     * @param int[] $usersIds Id студентов в группе
+     * @param int $teacherId Id преподавателя
      */
     public function __construct(
-        private int $id,
-        private array $users,
-        private UserModel $teacher,
-    ) {
+        private int    $id,
+        private string $name,
+        private array  $usersIds,
+        private int    $teacherId,
+    )
+    {
     }
 
+    /**
+     * @return int Id группы
+     */
     public function getId(): int
     {
         return $this->id;
     }
 
-    public function getUsers(): array
+    /**
+     * @return string Имя группы
+     */
+    public function getName(): string
     {
-        return $this->users;
+        return $this->name;
     }
 
-    public function getTeacher(): UserModel
+    /**
+     * @return int[] Id студентов в группе
+     */
+    public function getUsersIds(): array
     {
-        return $this->teacher;
+        return $this->usersIds;
     }
 
+    /**
+     * @return int Id преподавателя
+     */
+    public function getTeacher(): int
+    {
+        return $this->teacherId;
+    }
 
 }

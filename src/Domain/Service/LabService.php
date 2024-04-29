@@ -2,11 +2,15 @@
 
 namespace App\Domain\Service;
 
+use App\Domain\Model\FileModel;
 use App\Domain\Model\LabModel;
 use App\Domain\Repository\IFileRepository;
 use App\Domain\Repository\ILabRepository;
 use App\Domain\Storage\ILabFileStorage;
 
+/**
+ * Сервис для работы с лабами
+ */
 class LabService
 {
     /**
@@ -23,32 +27,25 @@ class LabService
     }
 
     /**
+     * Создать лабу
+     *
      * @param string $name название
      * @param string $description описание
      * @param int $groupId идентификатор группы
-     * @param string[] $files пути к файлам
      * @return int id созданной лабы
      */
     public function create(
         string $name,
         string $description,
-        int    $groupId,
-        array  $files,
+        int    $groupId
     ): int
     {
-        $labId = $this->repository->create($name, $description, $groupId)->getId();
-
-        foreach ($files as $path) {
-            $nodes = explode('/', $path);
-            $name = end($nodes);
-            $this->fileRepository->createForLab($name, $labId);
-        }
-        $this->fileStorage->save($groupId, $labId, $files);
-
-        return $labId;
+        return $this->repository->create($name, $description, $groupId)->getId();
     }
 
     /**
+     * Получить все лабы
+     *
      * @param int|null $groupId id группы, для фильтрации
      * @return LabModel[] все лабораторные
      */
@@ -58,6 +55,8 @@ class LabService
     }
 
     /**
+     * Получить лабу по id
+     *
      * @param int $id id лабы
      * @return LabModel искомая лаба
      */
@@ -67,6 +66,8 @@ class LabService
     }
 
     /**
+     * Удалить лабу
+     *
      * @param int $id id лабы
      * @return void
      */
@@ -76,43 +77,36 @@ class LabService
     }
 
     /**
+     * Обновить лабу
+     *
      * @param int $id id лабы
-     * @param LabModel $lab обновленная лабораторная
+     * @param string $name имя лабы
+     * @param string $description описание лабы
+     * @param int $groupId id группы
      * @return void
      */
-    public function update(int $id, LabModel $lab): void
+    public function update(int $id, string $name, string $description, int $groupId): void
     {
-        $this->repository->update($id, $lab);
+        $this->repository->update($id, $name, $description, $groupId);
     }
 
     /**
+     * Обновить файлы лабы
+     *
      * @param int $id id лабы
-     * @param string[] $files файлы
+     * @param FileModel[] $files дескрипторы файлов во временном хранилище
      * @return void
      */
     public function updateFiles(int $id, array $files): void
     {
-        $groupId = $this->repository->getById($id)->getGroup()->getId();
+        $groupId = $this->repository->getById($id)->getGroupId();
         $this->fileStorage->clearLabFiles($groupId, $id);
         $this->fileRepository->deleteByLabID($id);
 
-        foreach ($files as $path) {
-            $nodes = explode('/', $path);
-            $name = end($nodes);
-            $this->fileRepository->createForLab($name, $id);
+
+        foreach ($files as $file) {
+            $constPath = $this->fileStorage->save($groupId, $id, $file);
+            $this->fileRepository->createForLab($constPath, $file->getName(), $id);
         }
-        $this->fileStorage->save($groupId, $id, $files);
-    }
-
-    /**
-     * @param int $id id лабы
-     * @param string $name имя файла
-     * @return string путь к файлу
-     */
-    public function getFile(int $id, string $name): string
-    {
-        $groupID = $this->repository->getById($id)->getGroup()->getId();
-
-        return $this->fileStorage->getFilePath($groupID, $id, $name);
     }
 }

@@ -2,19 +2,26 @@
 
 namespace App\Domain\Repository;
 
-use App\Domain\Model\LabState;
+use App\Domain\Model\SolutionState;
 use App\Domain\Model\SolutionModel;
 
+/**
+ * Интерфейс репозитория решений
+ */
 interface ISolutionRepository
 {
     /**
+     * Получить все решения
+     *
      * @param int|null $labId id лабы, для фильтрации
-     * @param LabState|null $state состояние, для фильтрации
+     * @param SolutionState|null $state состояние, для фильтрации
      * @return SolutionModel[] все решения
      */
-    public function getAll(?int $labId, ?LabState $state): array;
+    public function getAll(?int $labId, ?SolutionState $state): array;
 
     /**
+     * Получить решение по id
+     *
      * @param int $id
      * @return SolutionModel Результат поиска
      */
@@ -22,30 +29,38 @@ interface ISolutionRepository
 
 
     /**
+     * Создать решение
+     *
      * @param string $description описание
-     * @param LabState $state состояние
+     * @param SolutionState $state состояние
      * @param int $labId идентификатор лабораторной
      * @param int $userId идентификатор пользователя
      * @return SolutionModel
      */
     public function create(
-        string   $description,
-        LabState $state,
-        int      $labId,
-        int      $userId,
+        string        $description,
+        SolutionState $state,
+        int           $labId,
+        int           $userId,
     ): SolutionModel;
 
     /**
+     * Обновить решение
+     *
      * @param int $id какой Solution обновлять
-     * @param SolutionModel $solution обновленный Solution
+     * @param string $description описание
+     * @param SolutionState $state состояние
      * @return void
      */
     public function update(
         int           $id,
-        SolutionModel $solution,
+        string        $description,
+        SolutionState $state,
     ): void;
 
     /**
+     * Удалить решение
+     *
      * @param int $id
      * @return void
      */

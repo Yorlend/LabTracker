@@ -6,6 +6,9 @@ use App\Domain\Model\Role;
 use App\Domain\Model\UserModel;
 use App\Domain\Repository\IUserRepository;
 
+/**
+ * Сервис для работы с пользователями
+ */
 class UserService
 {
 
@@ -17,6 +20,8 @@ class UserService
     }
 
     /**
+     * Создать пользователя
+     *
      * @param string $userName ФИ создаваемого пользователя
      * @param string $login логин создаваемого пользователя
      * @param string $password пароль создаваемого пользователя
@@ -34,6 +39,8 @@ class UserService
     }
 
     /**
+     * Получить всех пользователей
+     *
      * @param int|null $groupId id группы пользователей, для фильтрации
      * @param Role|null $role роль пользователей, для фильтрации
      * @return UserModel[] все пользователи
@@ -44,6 +51,8 @@ class UserService
     }
 
     /**
+     * Получить пользователя по id
+     *
      * @param int $id id пользователя
      * @return UserModel искомый пользователь
      */
@@ -53,6 +62,8 @@ class UserService
     }
 
     /**
+     * Удалить пользователя
+     *
      * @param int $id id пользователя
      * @return void
      */
@@ -62,6 +73,8 @@ class UserService
     }
 
     /**
+     * Обновить пользователя
+     *
      * @param int $id id пользователя
      * @param UserModel $user обновленный пользователь
      * @return void

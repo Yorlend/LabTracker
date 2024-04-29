@@ -3,10 +3,7 @@
 namespace App\Tests\Domain\Service;
 
 use App\Domain\Model\FileModel;
-use App\Domain\Model\GroupModel;
 use App\Domain\Model\LabModel;
-use App\Domain\Model\Role;
-use App\Domain\Model\UserModel;
 use App\Domain\Service\LabService;
 use PHPUnit\Framework\TestCase;
 
@@ -20,16 +17,9 @@ class LabServiceTest extends TestCase
             1,
             'name',
             'desc',
-            new GroupModel(
-                1,
-                [
-                    new UserModel(1, 'name1', 'login1', 'pass1', Role::Student),
-                    new UserModel(2, 'name2', 'login2', 'pass2', Role::Student),
-                ],
-                new UserModel(3, 'name3', 'login3', 'pass3', Role::Teacher),
-            ),
+            1,
             [
-                new FileModel(1, 'name1'),
+                new FileModel(1, 'name1', 'path1'),
             ]
         );
 
@@ -39,29 +29,20 @@ class LabServiceTest extends TestCase
         $mockRepo
             ->expects($this->once())
             ->method('create')
-            ->with($expected->getName(), $expected->getDescription(), $expected->getGroup()->getId())
+            ->with($expected->getName(), $expected->getDescription(), $expected->getGroupId())
             ->willReturn($expected);
 
         $mockFIleRepo = $this->getMockBuilder('App\Domain\Repository\IFileRepository')
             ->onlyMethods(array('getAll', 'getById', 'createForLab', 'createForSolution', 'update', 'delete', 'deleteByLabID', 'deleteBySolutionID'))
             ->getMock();
-        $mockFIleRepo
-            ->expects($this->once())
-            ->method('createForLab')
-            ->with($expected->getFiles()[0]->getName(), $expected->getId())
-            ->willReturn($expected->getFiles()[0]);
 
         $mockStorage = $this->getMockBuilder('App\Domain\Storage\ILabFileStorage')
-            ->onlyMethods(array('save', 'clearLabFiles','getFilePath'))
+            ->onlyMethods(array('save', 'clearLabFiles'))
             ->getMock();
-        $mockStorage
-            ->expects($this->once())
-            ->method('save')
-            ->with($expected->getGroup()->getId(), $expected->getId(), $files);
 
         $service = new LabService($mockRepo, $mockFIleRepo, $mockStorage);
 
-        $actual = $service->create($expected->getName(), $expected->getDescription(), $expected->getGroup()->getId(), $files);
+        $actual = $service->create($expected->getName(), $expected->getDescription(), $expected->getGroupId(), $files);
 
         $this->assertSame($expected->getId(), $actual);
     }
@@ -72,17 +53,10 @@ class LabServiceTest extends TestCase
             1,
             'name',
             'desc',
-            new GroupModel(
-                1,
-                [
-                    new UserModel(1, 'name1', 'login1', 'pass1', Role::Student),
-                    new UserModel(2, 'name2', 'login2', 'pass2', Role::Student),
-                ],
-                new UserModel(3, 'name3', 'login3', 'pass3', Role::Teacher),
-            ),
+            1,
             [
-                new FileModel(1, 'name1'),
-                new FileModel(2, 'name2'),
+                new FileModel(1, 'name1', 'path1'),
+                new FileModel(2, 'name2', 'path2'),
             ]
         )];
 
@@ -99,7 +73,7 @@ class LabServiceTest extends TestCase
             ->getMock();
 
         $mockStorage = $this->getMockBuilder('App\Domain\Storage\ILabFileStorage')
-            ->onlyMethods(array('save', 'clearLabFiles','getFilePath'))
+            ->onlyMethods(array('save', 'clearLabFiles'))
             ->getMock();
 
         $service = new LabService($mockRepo, $mockFIleRepo, $mockStorage);
@@ -115,17 +89,10 @@ class LabServiceTest extends TestCase
             1,
             'name',
             'desc',
-            new GroupModel(
-                1,
-                [
-                    new UserModel(1, 'name1', 'login1', 'pass1', Role::Student),
-                    new UserModel(2, 'name2', 'login2', 'pass2', Role::Student),
-                ],
-                new UserModel(3, 'name3', 'login3', 'pass3', Role::Teacher),
-            ),
+            1,
             [
-                new FileModel(1, 'name1'),
-                new FileModel(2, 'name2'),
+                new FileModel(1, 'name1', 'path1'),
+                new FileModel(2, 'name2', 'path2'),
             ]
         );
 
@@ -143,7 +110,7 @@ class LabServiceTest extends TestCase
             ->getMock();
 
         $mockStorage = $this->getMockBuilder('App\Domain\Storage\ILabFileStorage')
-            ->onlyMethods(array('save', 'clearLabFiles','getFilePath'))
+            ->onlyMethods(array('save', 'clearLabFiles'))
             ->getMock();
 
         $service = new LabService($mockRepo, $mockFIleRepo, $mockStorage);
@@ -168,7 +135,7 @@ class LabServiceTest extends TestCase
             ->getMock();
 
         $mockStorage = $this->getMockBuilder('App\Domain\Storage\ILabFileStorage')
-            ->onlyMethods(array('save', 'clearLabFiles','getFilePath'))
+            ->onlyMethods(array('save', 'clearLabFiles'))
             ->getMock();
 
         $service = new LabService($mockRepo, $mockFIleRepo, $mockStorage);
@@ -182,17 +149,10 @@ class LabServiceTest extends TestCase
             1,
             'name',
             'desc',
-            new GroupModel(
-                1,
-                [
-                    new UserModel(1, 'name1', 'login1', 'pass1', Role::Student),
-                    new UserModel(2, 'name2', 'login2', 'pass2', Role::Student),
-                ],
-                new UserModel(3, 'name3', 'login3', 'pass3', Role::Teacher),
-            ),
+            1,
             [
-                new FileModel(1, 'name1'),
-                new FileModel(2, 'name2'),
+                new FileModel(1, 'name1', 'path1'),
+                new FileModel(2, 'name2', 'path2'),
             ]
         );
 
@@ -202,39 +162,30 @@ class LabServiceTest extends TestCase
         $mockRepo
             ->expects($this->once())
             ->method('update')
-            ->with(1, $model);
+            ->with(1, 'name', 'desc', 1);
 
         $mockFIleRepo = $this->getMockBuilder('App\Domain\Repository\IFileRepository')
             ->onlyMethods(array('getAll', 'getById', 'createForLab', 'createForSolution', 'update', 'delete', 'deleteByLabID', 'deleteBySolutionID'))
             ->getMock();
 
         $mockStorage = $this->getMockBuilder('App\Domain\Storage\ILabFileStorage')
-            ->onlyMethods(array('save', 'clearLabFiles','getFilePath'))
+            ->onlyMethods(array('save', 'clearLabFiles'))
             ->getMock();
 
         $service = new LabService($mockRepo, $mockFIleRepo, $mockStorage);
 
-        $service->update(1, $model);
+        $service->update(1, 'name', 'desc', 1);
     }
 
     public function testUpdateFiles(): void
     {
-        $files = ['path1/name1'];
+        $files = [new FileModel(1, 'name1', 'path1')];
         $model = new LabModel(
             1,
             'name',
             'desc',
-            new GroupModel(
-                1,
-                [
-                    new UserModel(1, 'name1', 'login1', 'pass1', Role::Student),
-                    new UserModel(2, 'name2', 'login2', 'pass2', Role::Student),
-                ],
-                new UserModel(3, 'name3', 'login3', 'pass3', Role::Teacher),
-            ),
-            [
-                new FileModel(1, 'name1'),
-            ]
+            1,
+            $files
         );
 
         $mockRepo = $this->getMockBuilder('App\Domain\Repository\ILabRepository')
@@ -246,6 +197,7 @@ class LabServiceTest extends TestCase
             ->with($model->getId())
             ->willReturn($model);
 
+        $constPath = "pathcnst";
         $mockFIleRepo = $this->getMockBuilder('App\Domain\Repository\IFileRepository')
             ->onlyMethods(array('getAll', 'getById', 'createForLab', 'createForSolution', 'update', 'delete', 'deleteByLabID', 'deleteBySolutionID'))
             ->getMock();
@@ -256,72 +208,24 @@ class LabServiceTest extends TestCase
         $mockFIleRepo
             ->expects($this->once())
             ->method('createForLab')
-            ->with('name1', $model->getId())
-            ->willReturn($model->getFiles()[0]);
+            ->with($constPath, $files[0]->getName(), $model->getId())
+            ->willReturn($files[0]);
 
         $mockStorage = $this->getMockBuilder('App\Domain\Storage\ILabFileStorage')
-            ->onlyMethods(array('save', 'clearLabFiles','getFilePath'))
+            ->onlyMethods(array('save', 'clearLabFiles'))
             ->getMock();
         $mockStorage
             ->expects($this->once())
             ->method('clearLabFiles')
-            ->with($model->getGroup()->getId(), $model->getId());
+            ->with($model->getGroupId(), $model->getId());
         $mockStorage
             ->expects($this->once())
             ->method('save')
-            ->with($model->getGroup()->getId(), $model->getId(), $files);
+            ->with($model->getGroupId(), $model->getId(), $files[0])
+            ->willReturn($constPath);
 
         $service = new LabService($mockRepo, $mockFIleRepo, $mockStorage);
 
         $service->updateFiles($model->getId(), $files);
-    }
-
-    public function testGetFiles(): void
-    {
-        $model = new LabModel(
-            1,
-            'name',
-            'desc',
-            new GroupModel(
-                1,
-                [
-                    new UserModel(1, 'name1', 'login1', 'pass1', Role::Student),
-                    new UserModel(2, 'name2', 'login2', 'pass2', Role::Student),
-                ],
-                new UserModel(3, 'name3', 'login3', 'pass3', Role::Teacher),
-            ),
-            [
-                new FileModel(1, 'name1')
-            ]
-        );
-        $expected = 'path';
-
-        $mockRepo = $this->getMockBuilder('App\Domain\Repository\ILabRepository')
-            ->onlyMethods(array('getAll', 'getById', 'create', 'update', 'delete'))
-            ->getMock();
-        $mockRepo
-            ->expects($this->once())
-            ->method('getById')
-            ->with(1)
-            ->willReturn($model);
-
-        $mockFIleRepo = $this->getMockBuilder('App\Domain\Repository\IFileRepository')
-            ->onlyMethods(array('getAll', 'getById', 'createForLab', 'createForSolution', 'update', 'delete', 'deleteByLabID', 'deleteBySolutionID'))
-            ->getMock();
-
-        $mockStorage = $this->getMockBuilder('App\Domain\Storage\ILabFileStorage')
-            ->onlyMethods(array('save', 'clearLabFiles','getFilePath'))
-            ->getMock();
-        $mockStorage
-            ->expects($this->once())
-            ->method('getFilePath')
-            ->with($model->getGroup()->getId(), $model->getId(), $model->getFiles()[0]->getName())
-            ->willReturn($expected);
-
-        $service = new LabService($mockRepo, $mockFIleRepo, $mockStorage);
-
-        $actual = $service->getFile($model->getId(), $model->getFiles()[0]->getName());
-
-        $this->assertSame($expected, $actual);
     }
 }
