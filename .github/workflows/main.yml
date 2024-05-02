@@ -16,7 +16,7 @@ jobs:
           services: php
       
       - name: Собрать зависимости проекта
-        run: docker compose exec php composer install
+        run: docker compose --env-file .env.local exec php composer install
 
       # - name: Загрузить зависимости как артефакт проекта
       #   uses: actions/upload-artifact@v4
@@ -43,7 +43,7 @@ jobs:
         
 
       - name: Собрать зависимости проекта
-        run: docker compose exec php composer install
+        run: docker compose --env-file .env.local exec php composer install
       # - name: Скачать зависимости как артефакт проекта
       #   uses: actions/download-artifact@v4
       #   with:
@@ -54,7 +54,7 @@ jobs:
       #   run: chmod +x vendor/bin/*
         
       - name: Запуск тестов
-        run: docker compose exec php composer exec phpunit
+        run: docker compose --env-file .env.local exec php composer exec phpunit
 
   deploy:
 
@@ -70,4 +70,4 @@ jobs:
           cd /home/labtracker/deploy
           git pull
           docker compose --env-file .env.local up -d
-          docker compose exec php composer install --no-interaction --prefer-dist --optimize-autoloader
+          docker compose --env-file .env.local exec php composer install --no-interaction --prefer-dist --optimize-autoloader
