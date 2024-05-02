@@ -13,7 +13,7 @@ class CommentServiceTest extends TestCase
     public function testCreate(): void
     {
         $mockRepo = $this->getMockBuilder('App\Domain\Repository\ICommentRepository')
-            ->onlyMethods(array('create', 'update', 'delete'))
+            ->onlyMethods(array('create', 'update', 'delete', 'getBySolutionId'))
             ->getMock();
         $mockRepo
             ->expects($this->once())
@@ -33,10 +33,36 @@ class CommentServiceTest extends TestCase
         $this->assertSame($expected, $actual);
     }
 
+    public function testGetBySolutionId(): void
+    {
+        $expected = [
+            new CommentModel(
+                1,
+                'text',
+                'now',
+                new UserModel(1, 'name', 'login', 'pass', Role::Administrator)
+            )
+        ];
+
+        $mockRepo = $this->getMockBuilder('App\Domain\Repository\ICommentRepository')
+            ->onlyMethods(array('create', 'update', 'delete', 'getBySolutionId'))
+            ->getMock();
+        $mockRepo
+            ->expects($this->once())
+            ->method('getBySolutionId')
+            ->with(1)
+            ->willReturn($expected);
+        $service = new CommentService($mockRepo);
+
+        $actual = $service->getBySolutionId(1);
+
+        $this->assertSame($expected, $actual);
+    }
+
     public function testDelete(): void
     {
         $mockRepo = $this->getMockBuilder('App\Domain\Repository\ICommentRepository')
-            ->onlyMethods(array('create', 'update', 'delete'))
+            ->onlyMethods(array('create', 'update', 'delete', 'getBySolutionId'))
             ->getMock();
         $mockRepo
             ->expects($this->once())
@@ -56,14 +82,14 @@ class CommentServiceTest extends TestCase
             new UserModel(1, 'name', 'login', 'pass', Role::Administrator)
         );
         $mockRepo = $this->getMockBuilder('App\Domain\Repository\ICommentRepository')
-            ->onlyMethods(array('create', 'update', 'delete'))
+            ->onlyMethods(array('create', 'update', 'delete', 'getBySolutionId'))
             ->getMock();
         $mockRepo
             ->expects($this->once())
             ->method('update')
-            ->with(1, $model);
+            ->with(1, 'text');
         $service = new CommentService($mockRepo);
 
-        $service->update(1, $model);
+        $service->update(1, 'text');
     }
 }

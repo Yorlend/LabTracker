@@ -2,9 +2,12 @@
 
 namespace App\Domain\Model;
 
-enum Role
+/**
+ * Сущность роли пользователя
+ */
+enum Role : int
 {
-    case Administrator;
-    case Teacher;
-    case Student;
+    case Administrator = 1;
+    case Teacher = 2;
+    case Student = 3;
 }

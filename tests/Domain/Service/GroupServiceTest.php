@@ -14,11 +14,9 @@ class GroupServiceTest extends TestCase
     {
         $expected = new GroupModel(
             1,
-            [
-                new UserModel(1, 'name1', 'login1', 'pass1', Role::Student),
-                new UserModel(2, 'name2', 'login2', 'pass2', Role::Student),
-            ],
-            new UserModel(3, 'name3', 'login3', 'pass3', Role::Teacher),
+            "group1",
+            [1, 2,],
+            3
         );
 
         $mockRepo = $this->getMockBuilder('App\Domain\Repository\IGroupRepository')
@@ -27,11 +25,11 @@ class GroupServiceTest extends TestCase
         $mockRepo
             ->expects($this->once())
             ->method('create')
-            ->with([1, 2], 3)
+            ->with("group1", [1, 2], 3)
             ->willReturn($expected);
         $service = new GroupService($mockRepo);
 
-        $actual = $service->create([1, 2], 3);
+        $actual = $service->create("group1", [1, 2], 3);
 
         $this->assertSame($expected->getId(), $actual);
     }
@@ -40,11 +38,9 @@ class GroupServiceTest extends TestCase
     {
         $expected = [new GroupModel(
             1,
-            [
-                new UserModel(1, 'name1', 'login1', 'pass1', Role::Student),
-                new UserModel(2, 'name2', 'login2', 'pass2', Role::Student),
-            ],
-            new UserModel(3, 'name3', 'login3', 'pass3', Role::Teacher),
+            "group1",
+            [1, 2,],
+            3
         )];
 
         $mockRepo = $this->getMockBuilder('App\Domain\Repository\IGroupRepository')
@@ -65,11 +61,9 @@ class GroupServiceTest extends TestCase
     {
         $expected = new GroupModel(
             1,
-            [
-                new UserModel(1, 'name1', 'login1', 'pass1', Role::Student),
-                new UserModel(2, 'name2', 'login2', 'pass2', Role::Student),
-            ],
-            new UserModel(3, 'name3', 'login3', 'pass3', Role::Teacher),
+            "group1",
+            [1, 2,],
+            3
         );
 
         $mockRepo = $this->getMockBuilder('App\Domain\Repository\IGroupRepository')
@@ -105,11 +99,9 @@ class GroupServiceTest extends TestCase
     {
         $model = new GroupModel(
             1,
-            [
-                new UserModel(1, 'name1', 'login1', 'pass1', Role::Student),
-                new UserModel(2, 'name2', 'login2', 'pass2', Role::Student),
-            ],
-            new UserModel(3, 'name3', 'login3', 'pass3', Role::Teacher),
+            "group1",
+            [1, 2,],
+            3
         );
 
         $mockRepo = $this->getMockBuilder('App\Domain\Repository\IGroupRepository')
@@ -118,10 +110,10 @@ class GroupServiceTest extends TestCase
         $mockRepo
             ->expects($this->once())
             ->method('update')
-            ->with(1, $model);
+            ->with(1, "group1", 3);
         $service = new GroupService($mockRepo);
 
-        $service->update(1, $model);
+        $service->update(1, "group1", 3);
     }
 
     public function testAddUsers(): void

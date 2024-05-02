@@ -5,9 +5,14 @@ namespace App\Domain\Repository;
 use App\Domain\Model\Role;
 use App\Domain\Model\UserModel;
 
+/**
+ * Интерфейс репозитория пользователей
+ */
 interface IUserRepository
 {
     /**
+     * Получить всех пользователей
+     *
      * @param int|null $groupId id группы пользователей
      * @param Role|null $role роль пользователей
      * @return UserModel[] Все пользователи
@@ -15,12 +20,16 @@ interface IUserRepository
     public function getAll(?int $groupId, ?Role $role): array;
 
     /**
+     * Получить пользователя по id
+     *
      * @param int $id
      * @return UserModel Результат поиска
      */
     public function getById(int $id): UserModel;
 
     /**
+     * Создать пользователя
+     *
      * @param string $userName ФИ создаваемого пользователя
      * @param string $login логин создаваемого пользователя
      * @param string $password пароль создаваемого пользователя
@@ -35,6 +44,8 @@ interface IUserRepository
     ): UserModel;
 
     /**
+     * Обновить пользователя
+     *
      * @param int $id какого пользователя обновлять
      * @param UserModel $user обновленный пользователь
      * @return void
@@ -45,6 +56,8 @@ interface IUserRepository
     ): void;
 
     /**
+     * Удалить пользователя
+     *
      * @param int $id
      * @return void
      */

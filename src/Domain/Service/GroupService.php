@@ -4,7 +4,11 @@ namespace App\Domain\Service;
 
 use App\Domain\Model\GroupModel;
 use App\Domain\Repository\IGroupRepository;
+use App\Domain\Repository\Mock\GroupMemRepository;
 
+/**
+ * Сервис для работы с группами
+ */
 class GroupService
 {
     /**
@@ -15,19 +19,25 @@ class GroupService
     }
 
     /**
+     * Создать группу
+     *
+     * @param string $name имя группы
      * @param int[] $users id студентов
      * @param int $teacherId id преподавателя
      * @return int id созданного пользователя
      */
     public function create(
-        array $users,
-        int   $teacherId,
+        string $name,
+        array  $users,
+        int    $teacherId,
     ): int
     {
-        return $this->repository->create($users, $teacherId)->getId();
+        return $this->repository->create($name, $users, $teacherId)->getId();
     }
 
     /**
+     * Получить все группы
+     *
      * @param int|null $userId id пользователя, для фильтрации
      * @return GroupModel[] все группы
      */
@@ -37,6 +47,8 @@ class GroupService
     }
 
     /**
+     * Получить группу по id
+     *
      * @param int $id id группы
      * @return GroupModel искомая группа
      */
@@ -46,6 +58,8 @@ class GroupService
     }
 
     /**
+     * Удалить группу
+     *
      * @param int $id id группы
      * @return void
      */
@@ -55,15 +69,20 @@ class GroupService
     }
 
     /**
+     * Обновить группу
+     *
      * @param int $id id пользователя
-     * @param GroupModel $group обновленная группа
+     * @param string $name имя группы
+     * @param int $teacherId id преподавателя
      */
-    public function update(int $id, GroupModel $group): void
+    public function update(int $id, string $name, int $teacherId): void
     {
-        $this->repository->update($id, $group);
+        $this->repository->update($id, $name, $teacherId);
     }
 
     /**
+     * Добавить ученика в группу
+     *
      * @param int $groupId id группы, в которую добавляются пользователи
      * @param array $usersId id пользователей, которых нужно добавить
      * @return void
@@ -74,6 +93,8 @@ class GroupService
     }
 
     /**
+     * Удалить ученика из группы
+     *
      * @param int $groupId id группы, из которой удаляются пользователи
      * @param array $usersId id пользователей, которых нужно удалить
      * @return void
@@ -84,6 +105,8 @@ class GroupService
     }
 
     /**
+     * Добавить лабу в группу
+     *
      * @param int $groupId id группы, в которую добавляется лаба
      * @param int $labId id добавляемой лабы
      * @return void
@@ -94,6 +117,8 @@ class GroupService
     }
 
     /**
+     * Удалить лабу из группы
+     *
      * @param int $groupId id группы, из которой удаляется лаба
      * @param int $labId id удаляемой лабы
      * @return void

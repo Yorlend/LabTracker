@@ -5,6 +5,9 @@ namespace App\Domain\Service;
 use App\Domain\Model\CommentModel;
 use App\Domain\Repository\ICommentRepository;
 
+/**
+ * Сервис для работы с комментариями
+ */
 class CommentService
 {
     /**
@@ -15,6 +18,8 @@ class CommentService
     }
 
     /**
+     * Создать комментарий
+     *
      * @param int $solutionId id решения
      * @param string $text текст комментария
      * @return int id созданного комментария
@@ -28,21 +33,38 @@ class CommentService
     }
 
     /**
-     * @param int $id id коментария
+     * Получить комментарии, связанные с решением
+     *
+     * @param int $solutionId id решения
+     * @return CommentModel[] комменнтраии к решению
+     */
+    public function getBySolutionId(
+        int $solutionId,
+    ): array
+    {
+        return $this->repository->getBySolutionId($solutionId);
+    }
+
+    /**
+     * Обновить комментарий
+     *
+     * @param int $id id комментария
+     * @param string $text обновлённый текст
+     * @return void
+     */
+    public function update(int $id, string $text): void
+    {
+        $this->repository->update($id, $text);
+    }
+
+    /**
+     * Удалить комментарий
+     *
+     * @param int $id id комментария
      * @return void
      */
     public function delete(int $id): void
     {
         $this->repository->delete($id);
-    }
-
-    /**
-     * @param int $id id пользователя
-     * @param CommentModel $comment обновленный пользователь
-     * @return void
-     */
-    public function update(int $id, CommentModel $comment): void
-    {
-        $this->repository->update($id, $comment);
     }
 }
