@@ -14,7 +14,7 @@ class FileService
      * @param IFileRepository $fileRepository репозиторий файлов
      */
     public function __construct(
-        private readonly MSFileRepository $fileRepository,
+        private readonly IFileRepository $fileRepository,
     )
     {
     }

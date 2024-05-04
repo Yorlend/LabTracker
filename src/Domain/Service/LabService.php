@@ -9,6 +9,8 @@ use App\Domain\Repository\ILabRepository;
 use App\Domain\Storage\ILabFileStorage;
 use App\Data\MSLabRepository;
 use App\Data\MSFileRepository;
+use App\Domain\Storage\Mock\FSLabFileStorage;
+
 /**
  * Сервис для работы с лабами
  */
@@ -20,8 +22,8 @@ class LabService
      * @param ILabFileStorage $fileStorage хранилище файлов
      */
     public function __construct(
-        private readonly MSLabRepository  $repository,
-        private readonly MSFileRepository $fileRepository,
+        private readonly ILabRepository  $repository,
+        private readonly IFileRepository $fileRepository,
         private readonly ILabFileStorage $fileStorage,
     )
     {

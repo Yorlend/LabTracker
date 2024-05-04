@@ -28,7 +28,7 @@ class CommentServiceTest extends TestCase
         $service = new CommentService($mockRepo);
         $expected = 1;
 
-        $actual = $service->create(1, 'text');
+        $actual = $service->create(1, 'text', 1);
 
         $this->assertSame($expected, $actual);
     }

@@ -12,6 +12,10 @@ use App\Domain\Repository\IGroupRepository;
 use App\Domain\Repository\ILabRepository;
 use App\Domain\Repository\ISolutionRepository;
 use App\Domain\Repository\IUserRepository;
+use App\Domain\Storage\ILabFileStorage;
+use App\Domain\Storage\ISolutionFileStorage;
+use App\Domain\Storage\Mock\FSLabFileStorage;
+use App\Domain\Storage\Mock\FSSolutionFileStorage;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return function (ContainerConfigurator $container): void {
@@ -36,4 +40,7 @@ return function (ContainerConfigurator $container): void {
     $services->set(ILabRepository::class, MSLabRepository::class);
     $services->set(ISolutionRepository::class, MSSolutionRepository::class);
     $services->set(IUserRepository::class, MSUserRepository::class);
+
+    $services->set(ISolutionFileStorage::class, FSSolutionFileStorage::class);
+    $services->set(ILabFileStorage::class, FSLabFileStorage::class);
 };
