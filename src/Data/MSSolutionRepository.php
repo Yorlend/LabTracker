@@ -68,15 +68,15 @@ class MSSolutionRepository implements ISolutionRepository
     public function getAll(?int $labId, ?SolutionState $state): array
     {
         return $this->entityManager->getRepository(Solution::class)->findBy(
-            ['lab_id' == $labId],
-            ['state' == $state]
+            ['lab_id' => $labId,
+            'state' => $state]
         );
     }
 
     public function getById(int $id): SolutionModel
     {
         $sol = $this->entityManager->getRepository(Solution::class)->findOneBy(
-            ['id' == $id]
+            ['id' => $id]
         );
 
         return new SolutionModel(

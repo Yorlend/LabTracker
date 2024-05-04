@@ -51,7 +51,7 @@ class MSCommentRepository implements ICommentRepository
     public function getBySolutionId(int $solutionId): array
     {
         return $this->entityManager->getRepository(Comment::class)->findBy(
-            ['solution_id' == $solutionId]
+            ['solution_id' => $solutionId]
         );
     }
 
