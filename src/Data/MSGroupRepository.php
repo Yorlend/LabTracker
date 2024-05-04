@@ -34,7 +34,7 @@ class MSGroupRepository implements IGroupRepository
         $this->entityManager->persist($group);
         $this->entityManager->flush();
 
-        $usgr->setGroupId($group->getId());
+        $usgr->setGroupId($group);
         $this->entityManager->persist($usgr);
         $this->entityManager->flush();
 
