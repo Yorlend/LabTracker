@@ -9,7 +9,7 @@ use App\Entity\File;
 use App\Entity\Solution;
 use Doctrine\ORM\EntityManagerInterface;
 
-class MSFoleRepository implements IFileRepository
+class MSFileRepository implements IFileRepository
 {
     public function __construct(
         private EntityManagerInterface $entityManager,

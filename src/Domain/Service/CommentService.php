@@ -4,7 +4,7 @@ namespace App\Domain\Service;
 
 use App\Domain\Model\CommentModel;
 use App\Domain\Repository\ICommentRepository;
-
+use App\Data\MSCommentRepository;
 /**
  * Сервис для работы с комментариями
  */
@@ -13,7 +13,7 @@ class CommentService
     /**
      * @param ICommentRepository $repository репозиторий коментариев
      */
-    public function __construct(private readonly ICommentRepository $repository)
+    public function __construct(private readonly MSCommentRepository $repository)
     {
     }
 
@@ -22,14 +22,16 @@ class CommentService
      *
      * @param int $solutionId id решения
      * @param string $text текст комментария
+     * @param int $userId id пользователя
      * @return int id созданного комментария
      */
     public function create(
         int    $solutionId,
-        string $text
+        string $text,
+        int    $userId
     ): int
     {
-        return $this->repository->create($solutionId, $text)->getId();
+        return $this->repository->create($solutionId, $text, $userId)->getId();
     }
 
     /**

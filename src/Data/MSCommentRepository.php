@@ -17,7 +17,6 @@ use DateTime;
 class MSCommentRepository implements ICommentRepository
 {
     public function __construct(
-        private CommentRepository $doctrine,
         private EntityManagerInterface $entityManager,
     ) {
     }
@@ -51,21 +50,21 @@ class MSCommentRepository implements ICommentRepository
 
     public function getBySolutionId(int $solutionId): array
     {
-        return $this->doctrine->findBy(
+        return $this->entityManager->getRepository(Comment::class)->findBy(
             ['solution_id' == $solutionId]
         );
     }
 
     public function update(int $id, string $text): void
     {
-        $comment = $this->doctrine->find($id);
+        $comment = $this->entityManager->getRepository(Comment::class)->find($id);
         $comment->setText($text);
         $this->entityManager->flush();
     }
 
     public function delete(int $id): void
     {
-        $comment = $this->doctrine->find($id);
+        $comment = $this->entityManager->getRepository(Comment::class)->find($id);
         $this->entityManager->remove($comment);
         $this->entityManager->flush();
     }

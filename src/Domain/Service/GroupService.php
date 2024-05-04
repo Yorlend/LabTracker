@@ -5,7 +5,7 @@ namespace App\Domain\Service;
 use App\Domain\Model\GroupModel;
 use App\Domain\Repository\IGroupRepository;
 use App\Domain\Repository\Mock\GroupMemRepository;
-
+use App\Data\MSGroupRepository;
 /**
  * Сервис для работы с группами
  */
@@ -14,7 +14,7 @@ class GroupService
     /**
      * @param IGroupRepository $repository репозиторий групп
      */
-    public function __construct(private readonly IGroupRepository $repository)
+    public function __construct(private readonly MSGroupRepository $repository)
     {
     }
 

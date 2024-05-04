@@ -4,7 +4,7 @@ namespace App\Domain\Service;
 
 use App\Domain\Model\FileModel;
 use App\Domain\Repository\IFileRepository;
-
+use App\Data\MSFileRepository;
 /**
  * Сервис для работы с дескрипторами файлов
  */
@@ -14,7 +14,7 @@ class FileService
      * @param IFileRepository $fileRepository репозиторий файлов
      */
     public function __construct(
-        private readonly IFileRepository $fileRepository,
+        private readonly MSFileRepository $fileRepository,
     )
     {
     }

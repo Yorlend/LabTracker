@@ -8,7 +8,8 @@ use App\Domain\Model\SolutionState;
 use App\Domain\Repository\IFileRepository;
 use App\Domain\Repository\ISolutionRepository;
 use App\Domain\Storage\ISolutionFileStorage;
-
+use App\Data\MSSolutionRepository;
+use App\Data\MSFileRepository;
 /**
  * Сервис для работы с решениями
  */
@@ -20,8 +21,8 @@ class SolutionService
      * @param ISolutionFileStorage $fileStorage хранилище файлов
      */
     public function __construct(
-        private readonly ISolutionRepository  $repository,
-        private readonly IFileRepository      $fileRepository,
+        private readonly MSSolutionRepository  $repository,
+        private readonly MSFileRepository      $fileRepository,
         private readonly ISolutionFileStorage $fileStorage
     )
     {
