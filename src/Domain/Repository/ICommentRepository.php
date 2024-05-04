@@ -18,7 +18,8 @@ interface ICommentRepository
      */
     public function create(
         int    $solutionId,
-        string $text
+        string $text,
+        int    $userId
     ): CommentModel;
 
     /**
