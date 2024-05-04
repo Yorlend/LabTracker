@@ -5,7 +5,7 @@ namespace App\Domain\Service;
 use App\Domain\Model\Role;
 use App\Domain\Model\UserModel;
 use App\Domain\Repository\IUserRepository;
-
+use App\Data\MSUserRepository;
 /**
  * Сервис для работы с пользователями
  */
@@ -15,7 +15,7 @@ class UserService
     /**
      * @param IUserRepository $repository репозиторий пользователей
      */
-    public function __construct(private readonly IUserRepository $repository)
+    public function __construct(private readonly MSUserRepository $repository)
     {
     }
 

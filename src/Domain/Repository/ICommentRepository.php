@@ -14,11 +14,13 @@ interface ICommentRepository
      *
      * @param int $solutionId id решения
      * @param string $text текст комментария
+     * @param int $userId id пользователя
      * @return CommentModel созданный комментарий
      */
     public function create(
         int    $solutionId,
-        string $text
+        string $text,
+        int    $userId
     ): CommentModel;
 
     /**

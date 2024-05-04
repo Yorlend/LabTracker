@@ -21,13 +21,13 @@ class CommentMemRepository implements ICommentRepository
         );
     }
 
-    public function create(int $solutionId, string $text): CommentModel
+    public function create(int $solutionId, string $text, int $userId): CommentModel
     {
         $model = new CommentModel(
             1,
             'text',
             'now',
-            new UserModel(1, 'name', 'login', 'pass', Role::Administrator)
+            new UserModel($userId, 'name', 'login', 'pass', Role::Administrator)
         );
         $this->data[] = $model;
 

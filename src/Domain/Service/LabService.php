@@ -7,7 +7,8 @@ use App\Domain\Model\LabModel;
 use App\Domain\Repository\IFileRepository;
 use App\Domain\Repository\ILabRepository;
 use App\Domain\Storage\ILabFileStorage;
-
+use App\Data\MSLabRepository;
+use App\Data\MSFileRepository;
 /**
  * Сервис для работы с лабами
  */
@@ -19,8 +20,8 @@ class LabService
      * @param ILabFileStorage $fileStorage хранилище файлов
      */
     public function __construct(
-        private readonly ILabRepository  $repository,
-        private readonly IFileRepository $fileRepository,
+        private readonly MSLabRepository  $repository,
+        private readonly MSFileRepository $fileRepository,
         private readonly ILabFileStorage $fileStorage,
     )
     {
