@@ -15,7 +15,7 @@ class UserService
     /**
      * @param IUserRepository $repository репозиторий пользователей
      */
-    public function __construct(private readonly MSUserRepository $repository)
+    public function __construct(private readonly IUserRepository $repository)
     {
     }
 

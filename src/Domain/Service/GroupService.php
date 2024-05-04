@@ -14,7 +14,7 @@ class GroupService
     /**
      * @param IGroupRepository $repository репозиторий групп
      */
-    public function __construct(private readonly MSGroupRepository $repository)
+    public function __construct(private readonly IGroupRepository $repository)
     {
     }
 

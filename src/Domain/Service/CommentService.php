@@ -13,7 +13,7 @@ class CommentService
     /**
      * @param ICommentRepository $repository репозиторий коментариев
      */
-    public function __construct(private readonly MSCommentRepository $repository)
+    public function __construct(private readonly ICommentRepository $repository)
     {
     }
 

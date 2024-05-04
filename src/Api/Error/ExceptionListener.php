@@ -11,7 +11,7 @@ use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 /**
  * Слушатель исключений, для правильного http ответа
  */
-#[AsEventListener(event: "kernel.exception")]
+//#[AsEventListener(event: "kernel.exception")]
 class ExceptionListener
 {
     /**
