@@ -13,7 +13,7 @@ class CommentServiceTest extends TestCase
     public function testCreate(): void
     {
         $mockRepo = $this->getMockBuilder('App\Domain\Repository\ICommentRepository')
-            ->onlyMethods(array('create', 'update', 'delete', 'getBySolutionId'))
+            ->onlyMethods(array('create', 'update', 'delete', 'getBySolutionId', 'isOwner'))
             ->getMock();
         $mockRepo
             ->expects($this->once())
@@ -45,7 +45,7 @@ class CommentServiceTest extends TestCase
         ];
 
         $mockRepo = $this->getMockBuilder('App\Domain\Repository\ICommentRepository')
-            ->onlyMethods(array('create', 'update', 'delete', 'getBySolutionId'))
+            ->onlyMethods(array('create', 'update', 'delete', 'getBySolutionId', 'isOwner'))
             ->getMock();
         $mockRepo
             ->expects($this->once())
@@ -62,7 +62,7 @@ class CommentServiceTest extends TestCase
     public function testDelete(): void
     {
         $mockRepo = $this->getMockBuilder('App\Domain\Repository\ICommentRepository')
-            ->onlyMethods(array('create', 'update', 'delete', 'getBySolutionId'))
+            ->onlyMethods(array('create', 'update', 'delete', 'getBySolutionId', 'isOwner'))
             ->getMock();
         $mockRepo
             ->expects($this->once())
@@ -82,7 +82,7 @@ class CommentServiceTest extends TestCase
             new UserModel(1, 'name', 'login', 'pass', Role::Administrator)
         );
         $mockRepo = $this->getMockBuilder('App\Domain\Repository\ICommentRepository')
-            ->onlyMethods(array('create', 'update', 'delete', 'getBySolutionId'))
+            ->onlyMethods(array('create', 'update', 'delete', 'getBySolutionId', 'isOwner'))
             ->getMock();
         $mockRepo
             ->expects($this->once())

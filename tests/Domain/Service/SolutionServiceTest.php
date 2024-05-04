@@ -28,7 +28,7 @@ class SolutionServiceTest extends TestCase
         );
 
         $mockRepo = $this->getMockBuilder('App\Domain\Repository\ISolutionRepository')
-            ->onlyMethods(array('getAll', 'getById', 'create', 'update', 'delete'))
+            ->onlyMethods(array('getAll', 'getById', 'create', 'update', 'delete', 'isOwner'))
             ->getMock();
         $mockRepo
             ->expects($this->once())
@@ -66,7 +66,7 @@ class SolutionServiceTest extends TestCase
         )];
 
         $mockRepo = $this->getMockBuilder('App\Domain\Repository\ISolutionRepository')
-            ->onlyMethods(array('getAll', 'getById', 'create', 'update', 'delete'))
+            ->onlyMethods(array('getAll', 'getById', 'create', 'update', 'delete', 'isOwner'))
             ->getMock();
         $mockRepo
             ->expects($this->once())
@@ -103,7 +103,7 @@ class SolutionServiceTest extends TestCase
         );
 
         $mockRepo = $this->getMockBuilder('App\Domain\Repository\ISolutionRepository')
-            ->onlyMethods(array('getAll', 'getById', 'create', 'update', 'delete'))
+            ->onlyMethods(array('getAll', 'getById', 'create', 'update', 'delete', 'isOwner'))
             ->getMock();
         $mockRepo
             ->expects($this->once())
@@ -129,7 +129,7 @@ class SolutionServiceTest extends TestCase
     public function testDelete(): void
     {
         $mockRepo = $this->getMockBuilder('App\Domain\Repository\ISolutionRepository')
-            ->onlyMethods(array('getAll', 'getById', 'create', 'update', 'delete'))
+            ->onlyMethods(array('getAll', 'getById', 'create', 'update', 'delete', 'isOwner'))
             ->getMock();
         $mockRepo
             ->expects($this->once())
@@ -164,7 +164,7 @@ class SolutionServiceTest extends TestCase
         );
 
         $mockRepo = $this->getMockBuilder('App\Domain\Repository\ISolutionRepository')
-            ->onlyMethods(array('getAll', 'getById', 'create', 'update', 'delete'))
+            ->onlyMethods(array('getAll', 'getById', 'create', 'update', 'delete', 'isOwner'))
             ->getMock();
         $mockRepo
             ->expects($this->once())
@@ -197,7 +197,7 @@ class SolutionServiceTest extends TestCase
         );
 
         $mockRepo = $this->getMockBuilder('App\Domain\Repository\ISolutionRepository')
-            ->onlyMethods(array('getAll', 'getById', 'create', 'update', 'delete'))
+            ->onlyMethods(array('getAll', 'getById', 'create', 'update', 'delete', 'isOwner'))
             ->getMock();
         $mockRepo
             ->expects($this->once())
