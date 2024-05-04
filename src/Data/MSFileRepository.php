@@ -72,7 +72,7 @@ class MSFileRepository implements IFileRepository
     public function deleteByLabID(int $labId): void
     {
         $lab = $this->entityManager->getRepository(Lab::class)->findOneBy(
-            ['id' == $labId]
+            ['id' => $labId]
         );
 
         foreach ($lab->getFilesAdded()->getValues() as &$file)
@@ -84,7 +84,7 @@ class MSFileRepository implements IFileRepository
     public function deleteBySolutionID(int $labId): void
     {
         $sol = $this->entityManager->getRepository(Solution::class)->findOneBy(
-            ['id' == $labId]
+            ['id' => $labId]
         );
 
         foreach ($sol->getFilesAdded()->getValues() as &$file)

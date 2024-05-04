@@ -56,14 +56,14 @@ class MSLabRepository implements ILabRepository
     public function getAll(?int $groupId): array
     {
         return $this->entityManager->getRepository(Lab::class)->findBy(
-            ['group_id' == $groupId]
+            ['group_id' => $groupId]
         );
     }
 
     public function getById(int $id): LabModel
     {
         $lab = $this->entityManager->getRepository(Lab::class)->findOneBy(
-            ['id' == $id]
+            ['id' => $id]
         );
 
         return new LabModel(

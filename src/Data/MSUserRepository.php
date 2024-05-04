@@ -6,6 +6,7 @@ use App\Domain\Repository\IUserRepository;
 use App\Domain\Model\Role;
 use App\Domain\Model\UserModel;
 use App\Entity\User;
+use App\Entity\UserGroup;
 use Doctrine\ORM\EntityManagerInterface;
 
 class MSUserRepository implements IUserRepository
@@ -56,16 +57,19 @@ class MSUserRepository implements IUserRepository
 
     public function getAll(int|null $groupId, Role|null $role): array
     {
-        return $this->entityManager->getRepository(User::class)->findBy(
-            ['group_id' == $groupId],
-            ['role' == $role]
-        );
+        // return $this->entityManager->getRepository(User::class)->findBy(
+        //     ['group_id' == $groupId],
+        //     ['role' == $role]
+        // );
+        return $this->entityManager->getRepository(UserGroup::class)->findOneBy(
+            ['group_id' => $groupId]
+        )->getUserId()->toArray();
     }
 
     public function getById(int $id): UserModel
     {
         $user = $this->entityManager->getRepository(User::class)->findOneBy(
-            ['id' == $id]
+            ['id' => $id]
         );
         return new UserModel(
             $user->getId(),
