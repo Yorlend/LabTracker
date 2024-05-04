@@ -1,0 +1,1122 @@
+nelmio_api_doc:
+    documentation:
+        info:
+            title: LabTracker
+            version: "0.1"
+
+        servers:
+            - url: http://localhost:80/api/v1
+              description: local
+
+        tags:
+            - name: auth
+              description: Authorisation routes
+            - name: user
+              description: Users routes
+            - name: group
+              description: Study group routes
+            - name: lab
+              description: Laboratory work routes
+            - name: solution
+              description: Laboratory work solution routes
+            - name: files
+              description: Files routes
+
+        paths:
+            /auth/login:
+                post:
+                    tags:
+                        - auth
+                    summary: Login
+                    requestBody:
+                        content:
+                            application/json:
+                                schema:
+                                    $ref: '#/components/schemas/UserLoginForm'
+                    responses:
+                        200:
+                            description: Successful operation
+                            content:
+                                application/json:
+                                    schema:
+                                        type: object
+                                        properties:
+                                            token:
+                                                type: string
+                                                example: "token"
+                        400:
+                            $ref: '#/components/responses/400'
+                        401:
+                            $ref: '#/components/responses/401'
+                        500:
+                            $ref: '#/components/responses/500'
+            /auth/logout:
+                delete:
+                    tags:
+                        - auth
+                    security:
+                        - bearerAuth: [ ]
+                    summary: Logout
+                    responses:
+                        204:
+                            $ref: '#/components/responses/204'
+
+
+            /users:
+                post:
+                    tags:
+                        - user
+                    security:
+                        - bearerAuth: [ ]
+                    summary: Create user
+                    requestBody:
+                        content:
+                            application/json:
+                                schema:
+                                    $ref: '#/components/schemas/UserStore'
+                    responses:
+                        201:
+                            $ref: '#/components/responses/201'
+                        500:
+                            $ref: '#/components/responses/500'
+
+                get:
+                    tags:
+                        - user
+                    security:
+                        - bearerAuth: [ ]
+                    summary: Get all users
+                    responses:
+                        200:
+                            description: Successful operation
+                            content:
+                                application/json:
+                                    schema:
+                                        type: array
+                                        items:
+                                            $ref: '#/components/schemas/UserLite'
+                        400:
+                            $ref: '#/components/responses/400'
+                        500:
+                            $ref: '#/components/responses/500'
+                    parameters:
+                        - in: query
+                          name: group
+                          schema:
+                              type: integer
+                              example: 1
+                        - in: query
+                          name: role
+                          schema:
+                              type: integer
+                              example: 1
+
+
+            /users/{id}:
+                parameters:
+                    - in: path
+                      name: id
+                      description: ID of user
+                      required: true
+                      schema:
+                          type: integer
+                          minimum: 1
+
+                get:
+                    tags:
+                        - user
+                    security:
+                        - bearerAuth: [ ]
+                    summary: Get user
+                    responses:
+                        200:
+                            description: Successful operation
+                            content:
+                                application/json:
+                                    schema:
+                                        $ref: '#/components/schemas/User'
+                        400:
+                            $ref: '#/components/responses/400'
+                        404:
+                            $ref: '#/components/responses/404'
+                        500:
+                            $ref: '#/components/responses/500'
+
+                put:
+                    tags:
+                        - user
+                    security:
+                        - bearerAuth: [ ]
+                    summary: Update user
+                    requestBody:
+                        content:
+                            application/json:
+                                schema:
+                                    $ref: '#/components/schemas/UserUpdate'
+                    responses:
+                        204:
+                            $ref: '#/components/responses/204'
+                        400:
+                            $ref: '#/components/responses/400'
+                        404:
+                            $ref: '#/components/responses/404'
+                        500:
+                            $ref: '#/components/responses/500'
+
+                delete:
+                    tags:
+                        - user
+                    security:
+                        - bearerAuth: [ ]
+                    summary: Delete user
+                    responses:
+                        204:
+                            $ref: '#/components/responses/204'
+                        404:
+                            $ref: '#/components/responses/404'
+                        500:
+                            $ref: '#/components/responses/500'
+
+            /groups:
+                post:
+                    tags:
+                        - group
+                    security:
+                        - bearerAuth: [ ]
+                    summary: Create group
+                    requestBody:
+                        content:
+                            application/json:
+                                schema:
+                                    $ref: '#/components/schemas/GroupStore'
+                    responses:
+                        201:
+                            $ref: '#/components/responses/201'
+                        500:
+                            $ref: '#/components/responses/500'
+
+                get:
+                    tags:
+                        - group
+                    security:
+                        - bearerAuth: [ ]
+                    summary: Get all groups
+                    responses:
+                        200:
+                            description: Successful operation
+                            content:
+                                application/json:
+                                    schema:
+                                        type: array
+                                        items:
+                                            $ref: '#/components/schemas/GroupLite'
+                        400:
+                            $ref: '#/components/responses/400'
+                        500:
+                            $ref: '#/components/responses/500'
+                    parameters:
+                        - in: query
+                          name: user
+                          schema:
+                              type: integer
+                              example: 1
+
+
+            /groups/{id}:
+                parameters:
+                    - in: path
+                      name: id
+                      description: ID of group
+                      required: true
+                      schema:
+                          type: integer
+                          minimum: 1
+
+                get:
+                    tags:
+                        - group
+                    security:
+                        - bearerAuth: [ ]
+                    summary: Get group
+                    responses:
+                        200:
+                            description: Successful operation
+                            content:
+                                application/json:
+                                    schema:
+                                        $ref: '#/components/schemas/Group'
+                        400:
+                            $ref: '#/components/responses/400'
+                        404:
+                            $ref: '#/components/responses/404'
+                        500:
+                            $ref: '#/components/responses/500'
+
+                put:
+                    tags:
+                        - group
+                    security:
+                        - bearerAuth: [ ]
+                    summary: Update group
+                    requestBody:
+                        content:
+                            application/json:
+                                schema:
+                                    $ref: '#/components/schemas/GroupUpdate'
+                    responses:
+                        204:
+                            $ref: '#/components/responses/204'
+                        400:
+                            $ref: '#/components/responses/400'
+                        404:
+                            $ref: '#/components/responses/404'
+                        500:
+                            $ref: '#/components/responses/500'
+
+                delete:
+                    tags:
+                        - group
+                    security:
+                        - bearerAuth: [ ]
+                    summary: Delete group
+                    responses:
+                        204:
+                            $ref: '#/components/responses/204'
+                        404:
+                            $ref: '#/components/responses/404'
+                        500:
+                            $ref: '#/components/responses/500'
+
+            /groups/{id}/users:
+                parameters:
+                    - in: path
+                      name: id
+                      description: ID of group
+                      required: true
+                      schema:
+                          type: integer
+                          minimum: 1
+
+                post:
+                    tags:
+                        - group
+                    security:
+                        - bearerAuth: [ ]
+                    summary: Add user to group
+                    requestBody:
+                        content:
+                            application/json:
+                                schema:
+                                    type: object
+                                    required:
+                                        - users_id
+                                    properties:
+                                        users_id:
+                                            type: array
+                                            items:
+                                                type: integer
+                                                example: 1
+                    responses:
+                        201:
+                            $ref: '#/components/responses/201'
+                        404:
+                            $ref: '#/components/responses/404'
+                        500:
+                            $ref: '#/components/responses/500'
+
+                delete:
+                    tags:
+                        - group
+                    security:
+                        - bearerAuth: [ ]
+                    summary: Remove user from group
+                    requestBody:
+                        content:
+                            application/json:
+                                schema:
+                                    type: object
+                                    required:
+                                        - users_id
+                                    properties:
+                                        users_id:
+                                            type: array
+                                            items:
+                                                type: integer
+                                                example: 1
+                    responses:
+                        204:
+                            $ref: '#/components/responses/204'
+                        404:
+                            $ref: '#/components/responses/404'
+                        500:
+                            $ref: '#/components/responses/500'
+
+            /groups/{id}/lab/{lab_id}:
+                parameters:
+                    - in: path
+                      name: id
+                      description: ID of group
+                      required: true
+                      schema:
+                          type: integer
+                          minimum: 1
+                    - in: path
+                      name: lab_id
+                      description: ID of lab
+                      required: true
+                      schema:
+                          type: integer
+                          minimum: 1
+
+                post:
+                    tags:
+                        - group
+                    security:
+                        - bearerAuth: [ ]
+                    summary: Add lab to group
+                    responses:
+                        201:
+                            $ref: '#/components/responses/201'
+                        404:
+                            $ref: '#/components/responses/404'
+                        500:
+                            $ref: '#/components/responses/500'
+
+                delete:
+                    tags:
+                        - group
+                    security:
+                        - bearerAuth: [ ]
+                    summary: Remove lab from group
+                    responses:
+                        204:
+                            $ref: '#/components/responses/204'
+                        404:
+                            $ref: '#/components/responses/404'
+                        500:
+                            $ref: '#/components/responses/500'
+
+
+            /labs:
+                post:
+                    tags:
+                        - lab
+                    security:
+                        - bearerAuth: [ ]
+                    summary: Create lab
+                    requestBody:
+                        content:
+                            application/json:
+                                schema:
+                                    $ref: '#/components/schemas/LRStore'
+                    responses:
+                        201:
+                            $ref: '#/components/responses/201'
+                        500:
+                            $ref: '#/components/responses/500'
+
+                get:
+                    tags:
+                        - lab
+                    security:
+                        - bearerAuth: [ ]
+                    summary: Get all labs
+                    responses:
+                        200:
+                            description: Successful operation
+                            content:
+                                application/json:
+                                    schema:
+                                        type: array
+                                        items:
+                                            $ref: '#/components/schemas/LRLite'
+                        400:
+                            $ref: '#/components/responses/400'
+                        500:
+                            $ref: '#/components/responses/500'
+                    parameters:
+                        - in: query
+                          name: group
+                          schema:
+                              type: integer
+                              example: 1
+
+            /labs/{id}:
+                parameters:
+                    - in: path
+                      name: id
+                      description: ID of lab
+                      required: true
+                      schema:
+                          type: integer
+                          minimum: 1
+
+                get:
+                    tags:
+                        - lab
+                    security:
+                        - bearerAuth: [ ]
+                    summary: Get labs
+                    responses:
+                        200:
+                            description: Successful operation
+                            content:
+                                application/json:
+                                    schema:
+                                        $ref: '#/components/schemas/LR'
+                        400:
+                            $ref: '#/components/responses/400'
+                        404:
+                            $ref: '#/components/responses/404'
+                        500:
+                            $ref: '#/components/responses/500'
+
+                delete:
+                    tags:
+                        - lab
+                    security:
+                        - bearerAuth: [ ]
+                    summary: Delete lab
+                    responses:
+                        204:
+                            $ref: '#/components/responses/204'
+                        404:
+                            $ref: '#/components/responses/404'
+                        500:
+                            $ref: '#/components/responses/500'
+
+                patch:
+                    tags:
+                        - lab
+                    security:
+                        - bearerAuth: [ ]
+                    summary: Update lab description
+                    requestBody:
+                        content:
+                            application/json:
+                                schema:
+                                    $ref: '#/components/schemas/LRUpdateDesc'
+                    responses:
+                        204:
+                            $ref: '#/components/responses/204'
+                        400:
+                            $ref: '#/components/responses/400'
+                        404:
+                            $ref: '#/components/responses/404'
+                        500:
+                            $ref: '#/components/responses/500'
+
+            /labs/{id}/files:
+                patch:
+                    tags:
+                        - lab
+                    security:
+                        - bearerAuth: [ ]
+                    summary: Update lab file
+                    requestBody:
+                        content:
+                            application/json:
+                                schema:
+                                    $ref: '#/components/schemas/LRUpdateFile'
+                    responses:
+                        204:
+                            $ref: '#/components/responses/204'
+                        400:
+                            $ref: '#/components/responses/400'
+                        404:
+                            $ref: '#/components/responses/404'
+                        500:
+                            $ref: '#/components/responses/500'
+
+            /solutions:
+                post:
+                    tags:
+                        - solution
+                    security:
+                        - bearerAuth: [ ]
+                    summary: Create solution
+                    requestBody:
+                        content:
+                            application/json:
+                                schema:
+                                    $ref: '#/components/schemas/SolutionStore'
+                    responses:
+                        201:
+                            $ref: '#/components/responses/201'
+                        500:
+                            $ref: '#/components/responses/500'
+
+                get:
+                    tags:
+                        - solution
+                    security:
+                        - bearerAuth: [ ]
+                    summary: Get all solutions
+                    responses:
+                        200:
+                            description: Successful operation
+                            content:
+                                application/json:
+                                    schema:
+                                        type: array
+                                        items:
+                                            $ref: '#/components/schemas/SolutionLite'
+                        400:
+                            $ref: '#/components/responses/400'
+                        500:
+                            $ref: '#/components/responses/500'
+                    parameters:
+                        - in: query
+                          name: lab
+                          schema:
+                              type: integer
+                              example: 1
+                        - in: query
+                          name: state
+                          schema:
+                              type: integer
+                              example: 1
+
+            /solutions/{id}:
+                parameters:
+                    - in: path
+                      name: id
+                      description: ID of solution
+                      required: true
+                      schema:
+                          type: integer
+                          minimum: 1
+
+                get:
+                    tags:
+                        - solution
+                    security:
+                        - bearerAuth: [ ]
+                    summary: Get solution
+                    responses:
+                        200:
+                            description: Successful operation
+                            content:
+                                application/json:
+                                    schema:
+                                        $ref: '#/components/schemas/Solution'
+                        400:
+                            $ref: '#/components/responses/400'
+                        404:
+                            $ref: '#/components/responses/404'
+                        500:
+                            $ref: '#/components/responses/500'
+
+                delete:
+                    tags:
+                        - solution
+                    security:
+                        - bearerAuth: [ ]
+                    summary: Delete solution
+                    responses:
+                        204:
+                            $ref: '#/components/responses/204'
+                        404:
+                            $ref: '#/components/responses/404'
+                        500:
+                            $ref: '#/components/responses/500'
+
+                patch:
+                    tags:
+                        - solution
+                    security:
+                        - bearerAuth: [ ]
+                    summary: Update solution info
+                    requestBody:
+                        content:
+                            application/json:
+                                schema:
+                                    $ref: '#/components/schemas/SolutionUpdateDesc'
+                    responses:
+                        204:
+                            $ref: '#/components/responses/204'
+                        400:
+                            $ref: '#/components/responses/400'
+                        404:
+                            $ref: '#/components/responses/404'
+                        500:
+                            $ref: '#/components/responses/500'
+
+
+            /solutions/{id}/files:
+                parameters:
+                    - in: path
+                      name: id
+                      description: ID of solution
+                      required: true
+                      schema:
+                          type: integer
+                          minimum: 1
+
+                patch:
+                    tags:
+                        - solution
+                    security:
+                        - bearerAuth: [ ]
+                    summary: Update solution file
+                    requestBody:
+                        content:
+                            application/json:
+                                schema:
+                                    $ref: '#/components/schemas/SolutionUpdateFile'
+                    responses:
+                        204:
+                            $ref: '#/components/responses/204'
+                        400:
+                            $ref: '#/components/responses/400'
+                        404:
+                            $ref: '#/components/responses/404'
+                        500:
+                            $ref: '#/components/responses/500'
+
+            /solutions/{id}/comments:
+                parameters:
+                    - in: path
+                      name: id
+                      description: ID of solution
+                      required: true
+                      schema:
+                          type: integer
+                          minimum: 1
+
+                get:
+                    tags:
+                        - solution
+                    security:
+                        - bearerAuth: [ ]
+                    summary: Get solution comments
+                    responses:
+                        200:
+                            description: Successful operation
+                            content:
+                                application/json:
+                                    schema:
+                                        $ref: '#/components/schemas/Comment'
+                        400:
+                            $ref: '#/components/responses/400'
+                        404:
+                            $ref: '#/components/responses/404'
+                        500:
+                            $ref: '#/components/responses/500'
+
+                post:
+                    tags:
+                        - solution
+                    security:
+                        - bearerAuth: [ ]
+                    summary: Add comment to solution
+                    requestBody:
+                        content:
+                            application/json:
+                                schema:
+                                    $ref: '#/components/schemas/CommentSore'
+                    responses:
+                        201:
+                            $ref: '#/components/responses/201'
+                        500:
+                            $ref: '#/components/responses/500'
+
+            /solutions/{id}/comments/{comment_id}:
+                parameters:
+                    - in: path
+                      name: id
+                      description: ID of solution
+                      required: true
+                      schema:
+                          type: integer
+                          minimum: 1
+                    - in: path
+                      name: comment_id
+                      description: ID of comment
+                      required: true
+                      schema:
+                          type: integer
+                          minimum: 1
+
+                put:
+                    tags:
+                        - solution
+                    security:
+                        - bearerAuth: [ ]
+                    summary: Update comment of solution
+                    requestBody:
+                        content:
+                            application/json:
+                                schema:
+                                    $ref: '#/components/schemas/CommentSore'
+                    responses:
+                        204:
+                            $ref: '#/components/responses/204'
+                        400:
+                            $ref: '#/components/responses/400'
+                        404:
+                            $ref: '#/components/responses/404'
+                        500:
+                            $ref: '#/components/responses/500'
+
+                delete:
+                    tags:
+                        - solution
+                    security:
+                        - bearerAuth: [ ]
+                    summary: Delete comment of solution
+                    responses:
+                        204:
+                            $ref: '#/components/responses/204'
+                        404:
+                            $ref: '#/components/responses/404'
+                        500:
+                            $ref: '#/components/responses/500'
+
+            /files/{id}:
+                parameters:
+                    - in: path
+                      name: id
+                      description: ID of file
+                      required: true
+                      schema:
+                          type: integer
+                          minimum: 1
+
+                get:
+                    tags:
+                        - files
+                    security:
+                        - bearerAuth: [ ]
+                    summary: Download file
+                    responses:
+                        200:
+                            description: Successful operation
+                            content:
+                                application/json:
+                                    schema:
+                                        $ref: '#/components/schemas/File'
+                        400:
+                            $ref: '#/components/responses/400'
+                        404:
+                            $ref: '#/components/responses/404'
+                        500:
+                            $ref: '#/components/responses/500'
+
+
+        components:
+            securitySchemes:
+                bearerAuth:
+                    type: http
+                    scheme: bearer
+                    bearerFormat: JWT
+
+            schemas:
+                UserLoginForm:
+                    type: object
+                    required:
+                        - username
+                        - password
+                    properties:
+                        username:
+                            type: string
+                            example: "login1"
+                        password:
+                            type: string
+                            format: password
+                            example: "password1"
+                UserUpdate:
+                    type: object
+                    required:
+                        - login
+                        - password
+                        - user_name
+                        - role
+                    properties:
+                        login:
+                            type: string
+                            example: "login1"
+                        password:
+                            type: string
+                            format: password
+                            example: "password1"
+                        user_name:
+                            type: string
+                            example: "username1"
+                        role:
+                            type: integer
+                            example: 1
+                UserStore:
+                    allOf:
+                        - $ref: '#/components/schemas/UserUpdate'
+                UserLite:
+                    type: object
+                    properties:
+                        id:
+                            type: integer
+                            example: id
+                        user_name:
+                            type: string
+                            example: "username1"
+                User:
+                    allOf:
+                        - $ref: '#/components/schemas/UserLite'
+                        - type: array
+                          items:
+                              $ref: '#/components/schemas/UserLite'
+
+
+                GroupLite:
+                    type: object
+                    properties:
+                        id:
+                            type: integer
+                            example: 1
+                        name:
+                            type: string
+                            example: "group1"
+                GroupUpdate:
+                    type: object
+                    required:
+                        - name
+                        - teacher_id
+                    properties:
+                        name:
+                            type: string
+                            example: "group1"
+                        teacher_id:
+                            type: integer
+                            example: 1
+                GroupStore:
+                    allOf:
+                        - $ref: '#/components/schemas/GroupUpdate'
+                        - type: object
+                          required:
+                              - users_id
+                          properties:
+                              users_id:
+                                  type: array
+                                  items:
+                                      type: integer
+                                      example: 1
+                Group:
+                    allOf:
+                        - $ref: '#/components/schemas/GroupLite'
+                        - type: object
+                          properties:
+                              teacher_id:
+                                  type: integer
+                                  example: 1
+
+
+                LRLite:
+                    type: object
+                    required:
+                        - id
+                        - name
+                    properties:
+                        id:
+                            type: integer
+                            example: 1
+                        name:
+                            type: string
+                            example: "lr1"
+                LRUpdateDesc:
+                    type: object
+                    required:
+                        - name
+                        - description
+                        - group_id
+                    properties:
+                        name:
+                            type: string
+                            example: "lr1"
+                        description:
+                            type: string
+                            example: "desc1"
+                        group_id:
+                            type: integer
+                            example: 1
+                LRUpdateFile:
+                    type: object
+                    required:
+                        - files
+                    properties:
+                        files:
+                            type: array
+                            items:
+                                $ref: '#/components/schemas/FileStore'
+                LRStore:
+                    allOf:
+                        - $ref: '#/components/schemas/LRUpdateDesc'
+                LRFile:
+                    type: object
+                    required:
+                        - files
+                    properties:
+                        files:
+                            type: array
+                            items:
+                                $ref: '#/components/schemas/FileLite'
+                LR:
+                    allOf:
+                        - $ref: '#/components/schemas/LRLite'
+                        - $ref: '#/components/schemas/LRUpdateDesc'
+                        - $ref: '#/components/schemas/LRFile'
+
+
+                SolutionLite:
+                    type: object
+                    required:
+                        - id
+                        - user_id
+                        - user_name
+                        - state
+                    properties:
+                        id:
+                            type: integer
+                            example: 1
+                        user_id:
+                            type: integer
+                            example: 1
+                        lab_id:
+                            type: integer
+                            example: 1
+                        user_name:
+                            type: string
+                            example: "username"
+                        state:
+                            type: integer
+                            example: 1
+                SolutionUpdateDesc:
+                    type: object
+                    required:
+                        - description
+                        - state
+                    properties:
+                        description:
+                            type: string
+                            example: "description"
+                        state:
+                            type: integer
+                            example: 1
+                SolutionUpdateFile:
+                    type: object
+                    required:
+                        - files
+                    properties:
+                        files:
+                            type: array
+                            items:
+                                $ref: '#/components/schemas/FileStore'
+                SolutionStore:
+                    allOf:
+                        - type: object
+                          required:
+                              - user_id
+                              - user_name
+                              - state
+                              - description
+                          properties:
+                              lab_id:
+                                  type: integer
+                                  example: 1
+                              description:
+                                  type: string
+                                  example: "description"
+                SolutionFile:
+                    type: object
+                    required:
+                        - files
+                    properties:
+                        files:
+                            type: array
+                            items:
+                                $ref: '#/components/schemas/FileLite'
+                Solution:
+                    allOf:
+                        - $ref: '#/components/schemas/SolutionLite'
+                        - $ref: '#/components/schemas/SolutionFile'
+
+                Comment:
+                    type: array
+                    items:
+                        type: object
+                        required:
+                            - id
+                            - user_id
+                            - user_name
+                            - date
+                            - text
+                        properties:
+                            id:
+                                type: integer
+                                example: 1
+                            user_id:
+                                type: integer
+                                example: 1
+                            user_name:
+                                type: string
+                                example: "name"
+                            date:
+                                type: string
+                                example: "date"
+                            text:
+                                type: string
+                                example: "text"
+                CommentSore:
+                    type: object
+                    required:
+                        - text
+                    properties:
+                        text:
+                            type: string
+                            example: "text"
+
+                FileLite:
+                    type: object
+                    required:
+                        - id
+                        - name
+                    properties:
+                        id:
+                            type: integer
+                            example: 1
+                        name:
+                            type: string
+                            example: "file_name1"
+                FileStore:
+                    type: object
+                    required:
+                        - file
+                    properties:
+                        file:
+                            type: string
+                            format: binary
+                File:
+                    type: object
+                    required:
+                        - file
+                    properties:
+                        file:
+                            type: string
+                            format: binary
+
+
+            responses:
+                200:
+                    description: Successful operation
+                201:
+                    description: Successful operation
+                204:
+                    description: Successful operation
+                400:
+                    description: Bad request
+                401:
+                    description: Invalid login or password
+                403:
+                    description: Access denied
+                404:
+                    description: Not found
+                500:
+                    description: Server error

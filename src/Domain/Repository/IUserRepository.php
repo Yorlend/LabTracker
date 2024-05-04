@@ -28,6 +28,14 @@ interface IUserRepository
     public function getById(int $id): UserModel;
 
     /**
+     * Получить пользователя по логину
+     *
+     * @param string $login
+     * @return UserModel Результат поиска
+     */
+    public function getByLogin(string $login): UserModel;
+
+    /**
      * Создать пользователя
      *
      * @param string $userName ФИ создаваемого пользователя

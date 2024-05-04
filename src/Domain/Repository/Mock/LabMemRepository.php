@@ -61,4 +61,9 @@ class LabMemRepository implements ILabRepository
     public function delete(int $id): void
     {
     }
+
+    public function isTeacher(int $userId, int $labId): bool
+    {
+        return true;
+    }
 }

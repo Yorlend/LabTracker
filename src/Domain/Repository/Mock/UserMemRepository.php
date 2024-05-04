@@ -42,4 +42,9 @@ class UserMemRepository implements IUserRepository
     {
         unset($this->data[$id]);
     }
+
+    public function getByLogin(string $login): UserModel
+    {
+        return $this->data[0];
+    }
 }

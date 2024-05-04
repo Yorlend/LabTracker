@@ -2,6 +2,7 @@
 
 namespace App\Data;
 
+use App\Domain\Error\NotFoundError;
 use App\Domain\Model\LabModel;
 use App\Domain\Repository\ILabRepository;
 use App\Entity\Lab;
@@ -14,7 +15,7 @@ class MSLabRepository implements ILabRepository
     ) {
     }
 
-    public function create(string $name, string $description, int $groupId,): LabModel
+    public function create(string $name, string $description, int $groupId): LabModel
     {
         $lab = new Lab();
 
@@ -73,5 +74,21 @@ class MSLabRepository implements ILabRepository
             $lab->getGroupId()->getValues()[0]->getId(),
             $lab->getFilesAdded()->getValues()
         );
+    }
+
+    /**
+     * @throws NotFoundError
+     */
+    public function isTeacher(int $userId, int $labId): bool
+    {
+        $lab = $this->entityManager->getRepository(Lab::class)->findOneBy(
+            ['id' => $labId]
+        );
+
+        if ($lab == null) throw new NotFoundError("No lab with id {$labId}");
+
+        $teacherId = $lab->getGroupId()[0]->getTeacherId()->getId();
+
+        return $teacherId === $userId;
     }
 }

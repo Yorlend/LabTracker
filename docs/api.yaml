@@ -35,11 +35,14 @@ paths:
       responses:
         200:
           description: Successful operation
-          headers:
-            Set-Cookie:
+          content:
+            application/json:
               schema:
-                type: string
-                example: JSESSIONID=abcde12345; Path=/; HttpOnly
+                type: object
+                properties:
+                  token:
+                    type: string
+                    example: "token"
         400:
           $ref: '#/components/responses/400'
         401:
@@ -51,7 +54,7 @@ paths:
       tags:
         - auth
       security:
-        - cookieAuth: [ ]
+        - bearerAuth: [ ]
       summary: Logout
       responses:
         204:
@@ -63,7 +66,7 @@ paths:
       tags:
         - user
       security:
-        - cookieAuth: [ ]
+        - bearerAuth: [ ]
       summary: Create user
       requestBody:
         content:
@@ -80,7 +83,7 @@ paths:
       tags:
         - user
       security:
-        - cookieAuth: [ ]
+        - bearerAuth: [ ]
       summary: Get all users
       responses:
         200:
@@ -122,7 +125,7 @@ paths:
       tags:
         - user
       security:
-        - cookieAuth: [ ]
+        - bearerAuth: [ ]
       summary: Get user
       responses:
         200:
@@ -178,7 +181,7 @@ paths:
       tags:
         - group
       security:
-        - cookieAuth: [ ]
+        - bearerAuth: [ ]
       summary: Create group
       requestBody:
         content:
@@ -195,7 +198,7 @@ paths:
       tags:
         - group
       security:
-        - cookieAuth: [ ]
+        - bearerAuth: [ ]
       summary: Get all groups
       responses:
         200:
@@ -232,7 +235,7 @@ paths:
       tags:
         - group
       security:
-        - cookieAuth: [ ]
+        - bearerAuth: [ ]
       summary: Get group
       responses:
         200:
@@ -297,7 +300,7 @@ paths:
       tags:
         - group
       security:
-        - cookieAuth: [ ]
+        - bearerAuth: [ ]
       summary: Add user to group
       requestBody:
         content:
@@ -368,7 +371,7 @@ paths:
       tags:
         - group
       security:
-        - cookieAuth: [ ]
+        - bearerAuth: [ ]
       summary: Add lab to group
       responses:
         201:
@@ -398,7 +401,7 @@ paths:
       tags:
         - lab
       security:
-        - cookieAuth: [ ]
+        - bearerAuth: [ ]
       summary: Create lab
       requestBody:
         content:
@@ -415,7 +418,7 @@ paths:
       tags:
         - lab
       security:
-        - cookieAuth: [ ]
+        - bearerAuth: [ ]
       summary: Get all labs
       responses:
         200:
@@ -451,7 +454,7 @@ paths:
       tags:
         - lab
       security:
-        - cookieAuth: [ ]
+        - bearerAuth: [ ]
       summary: Get labs
       responses:
         200:
@@ -529,7 +532,7 @@ paths:
       tags:
         - solution
       security:
-        - cookieAuth: [ ]
+        - bearerAuth: [ ]
       summary: Create solution
       requestBody:
         content:
@@ -546,7 +549,7 @@ paths:
       tags:
         - solution
       security:
-        - cookieAuth: [ ]
+        - bearerAuth: [ ]
       summary: Get all solutions
       responses:
         200:
@@ -587,7 +590,7 @@ paths:
       tags:
         - solution
       security:
-        - cookieAuth: [ ]
+        - bearerAuth: [ ]
       summary: Get solution
       responses:
         200:
@@ -783,7 +786,7 @@ paths:
       tags:
         - files
       security:
-        - cookieAuth: [ ]
+        - bearerAuth: [ ]
       summary: Download file
       responses:
         200:
@@ -802,19 +805,19 @@ paths:
 
 components:
   securitySchemes:
-    cookieAuth:
-      type: apiKey
-      in: cookie
-      name: JSESSIONID
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
 
   schemas:
     UserLoginForm:
       type: object
       required:
-        - login
+        - username
         - password
       properties:
-        login:
+        username:
           type: string
           example: "login1"
         password:

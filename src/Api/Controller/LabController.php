@@ -2,17 +2,20 @@
 
 namespace App\Api\Controller;
 
+use App\Api\Auth\User;
 use App\Api\Request\Lab\StoreRequest;
 use App\Api\Response\IdStoreResponse;
 use App\Api\Response\Lab\IndexResponse;
 use App\Api\Response\Lab\ShowResponse;
 use App\Api\Response\NoContentResponse;
+use App\Domain\Error\AccessDeniedError;
 use App\Domain\Model\FileModel;
 use App\Domain\Service\LabService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\CurrentUser;
 
 #[Route('/labs')]
 class LabController extends AbstractController
@@ -24,6 +27,8 @@ class LabController extends AbstractController
     #[Route('', methods: ['POST'])]
     public function store(StoreRequest $request): IdStoreResponse
     {
+        $this->denyAccessUnlessGranted('ROLE_TEACHER');
+
         $id = $this->service->create($request->name, $request->description, $request->groupId);
 
         return new IdStoreResponse($id);
@@ -47,25 +52,56 @@ class LabController extends AbstractController
         return new ShowResponse($user);
     }
 
+    /**
+     * @throws AccessDeniedError
+     */
     #[Route('/{id}', requirements: ['id' => '\d+'], methods: ['DELETE'])]
-    public function delete(int $id): NoContentResponse
+    public function delete(#[CurrentUser] User $user, int $id): NoContentResponse
     {
+        $this->denyAccessUnlessGranted('ROLE_TEACHER');
+
+        if (!$this->service->isTeacher($user->getId(), $id)) {
+            throw new AccessDeniedError();
+        }
+
         $this->service->delete($id);
 
         return new NoContentResponse();
     }
 
+    /**
+     * @throws AccessDeniedError
+     */
     #[Route('/{id}/', requirements: ['id' => '\d+'], methods: ['PATCH'])]
-    public function updateDesc(int $id, StoreRequest $request): NoContentResponse
+    public function updateDesc(#[CurrentUser] User $user, int $id, StoreRequest $request): NoContentResponse
     {
+        $this->denyAccessUnlessGranted('ROLE_TEACHER');
+
+        if (!$this->service->isTeacher($user->getId(), $id)) {
+            throw new AccessDeniedError();
+        }
+
+        $this->service->delete($id);
+
         $this->service->update($id, $request->name, $request->description, $request->groupId);
 
         return new NoContentResponse();
     }
 
+    /**
+     * @throws AccessDeniedError
+     */
     #[Route('/{id}/files', requirements: ['id' => '\d+'], methods: ['POST'])]
-    public function updateFiles(int $id, Request $request): NoContentResponse
+    public function updateFiles(#[CurrentUser] User $user, int $id, Request $request): NoContentResponse
     {
+        $this->denyAccessUnlessGranted('ROLE_TEACHER');
+
+        if (!$this->service->isTeacher($user->getId(), $id)) {
+            throw new AccessDeniedError();
+        }
+
+        $this->service->delete($id);
+
         $tmpDst = $this->getParameter('kernel.project_dir') . '/uploads';
 
         $uploadedFiles = $request->files->keys();

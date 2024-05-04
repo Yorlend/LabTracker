@@ -6,6 +6,7 @@ use App\Domain\Model\Role;
 use App\Domain\Model\UserModel;
 use App\Domain\Repository\IUserRepository;
 use App\Data\MSUserRepository;
+
 /**
  * Сервис для работы с пользователями
  */
@@ -82,5 +83,16 @@ class UserService
     public function update(int $id, UserModel $user): void
     {
         $this->repository->update($id, $user);
+    }
+
+    /**
+     * Получить пользователя по логину
+     *
+     * @param string $login
+     * @return UserModel Результат поиска
+     */
+    public function getByLogin(string $login): UserModel
+    {
+        return $this->repository->getByLogin($login);
     }
 }

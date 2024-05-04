@@ -2,6 +2,7 @@
 
 namespace App\Data;
 
+use App\Domain\Error\NotFoundError;
 use App\Domain\Model\UserModel;
 use App\Domain\Repository\ICommentRepository;
 use App\Entity\Comment;
@@ -67,5 +68,19 @@ class MSCommentRepository implements ICommentRepository
         $comment = $this->entityManager->getRepository(Comment::class)->find($id);
         $this->entityManager->remove($comment);
         $this->entityManager->flush();
+    }
+
+    /**
+     * @throws NotFoundError
+     */
+    public function isOwner(int $userId, int $commentId): bool
+    {
+        $comment = $this->entityManager->getRepository(Solution::class)->findOneBy(
+            ['id' => $commentId]
+        );
+
+        if ($comment == null) throw new NotFoundError("No comment with id {$commentId}");
+
+        return $userId == $comment->getUserId()->getId();
     }
 }

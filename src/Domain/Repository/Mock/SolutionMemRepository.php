@@ -63,4 +63,9 @@ class SolutionMemRepository implements ISolutionRepository
     public function delete(int $id): void
     {
     }
+
+    public function isOwner(int $userId, int $solId): bool
+    {
+        return true;
+    }
 }

@@ -52,4 +52,13 @@ interface ICommentRepository
      * @return void
      */
     public function delete(int $id): void;
+
+    /**
+     * Проверка id создателя
+     *
+     * @param int $userId id предполагаемого создателя
+     * @param int $commentId id комментария
+     * @return bool является ли пользователь создателем
+     */
+    public function isOwner(int $userId, int $commentId): bool;
 }
