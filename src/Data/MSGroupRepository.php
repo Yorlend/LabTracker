@@ -34,7 +34,7 @@ class MSGroupRepository implements IGroupRepository
         $this->entityManager->persist($group);
         $this->entityManager->flush();
 
-        $usgr->setGroupId($group->getId());
+        $usgr->setGroupId($group);
         $this->entityManager->persist($usgr);
         $this->entityManager->flush();
 
@@ -71,7 +71,7 @@ class MSGroupRepository implements IGroupRepository
     public function getById(int $id): GroupModel
     {
         $group = $this->entityManager->getRepository(Group::class)->findOneBy(
-            ['id' == $id]
+            ['id' => $id]
         );
 
         return new GroupModel(
@@ -85,7 +85,7 @@ class MSGroupRepository implements IGroupRepository
     public function addUsers(int $groupId, array $usersId): void
     {
         $usgr = $this->entityManager->getRepository(UserGroup::class)->findOneBy(
-            ['group_id' == $groupId]
+            ['group_id' => $groupId]
         );
         foreach ($usersId as &$usr)
             if ($this->entityManager->getRepository(User::class)->find($usr))
@@ -97,7 +97,7 @@ class MSGroupRepository implements IGroupRepository
     public function deleteUsers(int $groupId, array $usersId): void
     {
         $usgr = $this->entityManager->getRepository(UserGroup::class)->findOneBy(
-            ['group_id' == $groupId]
+            ['group_id' => $groupId]
         );
         foreach ($usersId as &$usr)
             $usgr->removeUserId($usr);
@@ -108,7 +108,7 @@ class MSGroupRepository implements IGroupRepository
     public function addLab(int $groupId, int $labId): void
     {
         $group = $this->entityManager->getRepository(Group::class)->findOneBy(
-            ['id' == $groupId]
+            ['id' => $groupId]
         );
 
         if ($this->entityManager->getRepository(Lab::class)->find($labId) != null)
@@ -120,7 +120,7 @@ class MSGroupRepository implements IGroupRepository
     public function deleteLab(int $groupId, int $labId): void
     {
         $group = $this->entityManager->getRepository(Group::class)->findOneBy(
-            ['id' == $groupId]
+            ['id' => $groupId]
         );
 
         $group->removeIssuedLab($this->entityManager->getRepository(Lab::class)->find($labId));
