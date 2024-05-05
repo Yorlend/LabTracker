@@ -63,4 +63,13 @@ interface ILabRepository
      * @return void
      */
     public function delete(int $id): void;
+
+    /**
+     * Проверка id преподавателя
+     *
+     * @param int $userId id предполагаемого преподавателя
+     * @param int $labId id лабы
+     * @return bool является ли пользователь преподавателем
+     */
+    public function isTeacher(int $userId, int $labId): bool;
 }

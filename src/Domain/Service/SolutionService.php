@@ -8,9 +8,6 @@ use App\Domain\Model\SolutionState;
 use App\Domain\Repository\IFileRepository;
 use App\Domain\Repository\ISolutionRepository;
 use App\Domain\Storage\ISolutionFileStorage;
-use App\Data\MSSolutionRepository;
-use App\Data\MSFileRepository;
-use App\Domain\Storage\Mock\FSSolutionFileStorage;
 
 /**
  * Сервис для работы с решениями
@@ -113,6 +110,17 @@ class SolutionService
             $constPath = $this->fileStorage->save($labId, $id, $file);
             $this->fileRepository->createForSolution($constPath, $file->getName(), $id);
         }
+    }
+
+    /**
+     * Проверка id создателя
+     *
+     * @param int $userId id предполагаемого создателя
+     * @param int $solId id решения
+     * @return bool является ли пользователь создателем
+     */
+    public function isOwner(int $userId, int $solId): bool{
+        return $this->repository->isOwner($userId, $solId);
     }
 
 }

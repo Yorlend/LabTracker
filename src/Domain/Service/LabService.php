@@ -112,4 +112,15 @@ class LabService
             $this->fileRepository->createForLab($constPath, $file->getName(), $id);
         }
     }
+
+    /**
+     * Проверка id преподавателя
+     *
+     * @param int $userId id предполагаемого преподавателя
+     * @param int $labId id лабы
+     * @return bool является ли пользователь преподавателем
+     */
+    public function isTeacher(int $userId, int $labId): bool{
+        return $this->repository->isTeacher($userId, $labId);
+    }
 }

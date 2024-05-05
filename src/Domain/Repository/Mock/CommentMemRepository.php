@@ -46,4 +46,9 @@ class CommentMemRepository implements ICommentRepository
     {
         return $this->data;
     }
+
+    public function isOwner(int $userId, int $commentId): bool
+    {
+        return true;
+    }
 }

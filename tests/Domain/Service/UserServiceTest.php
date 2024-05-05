@@ -14,7 +14,7 @@ class UserServiceTest extends TestCase
         $expected = new UserModel(1, 'name1', 'login1', 'pass1', Role::Student);
 
         $mockRepo = $this->getMockBuilder('App\Domain\Repository\IUserRepository')
-            ->onlyMethods(array('getAll', 'getById', 'create', 'update', 'delete'))
+            ->onlyMethods(array('getAll', 'getById', 'create', 'update', 'delete', 'getByLogin'))
             ->getMock();
         $mockRepo
             ->expects($this->once())
@@ -37,7 +37,7 @@ class UserServiceTest extends TestCase
         ];
 
         $mockRepo = $this->getMockBuilder('App\Domain\Repository\IUserRepository')
-            ->onlyMethods(array('getAll', 'getById', 'create', 'update', 'delete'))
+            ->onlyMethods(array('getAll', 'getById', 'create', 'update', 'delete', 'getByLogin'))
             ->getMock();
         $mockRepo
             ->expects($this->once())
@@ -56,7 +56,7 @@ class UserServiceTest extends TestCase
         $expected = new UserModel(1, 'name1', 'login1', 'pass1', Role::Student);
 
         $mockRepo = $this->getMockBuilder('App\Domain\Repository\IUserRepository')
-            ->onlyMethods(array('getAll', 'getById', 'create', 'update', 'delete'))
+            ->onlyMethods(array('getAll', 'getById', 'create', 'update', 'delete', 'getByLogin'))
             ->getMock();
         $mockRepo
             ->expects($this->once())
@@ -74,7 +74,7 @@ class UserServiceTest extends TestCase
     public function testDelete(): void
     {
         $mockRepo = $this->getMockBuilder('App\Domain\Repository\IUserRepository')
-            ->onlyMethods(array('getAll', 'getById', 'create', 'update', 'delete'))
+            ->onlyMethods(array('getAll', 'getById', 'create', 'update', 'delete', 'getByLogin'))
             ->getMock();
         $mockRepo
             ->expects($this->once())
@@ -90,7 +90,7 @@ class UserServiceTest extends TestCase
         $model = new UserModel(1, 'name1', 'login1', 'pass1', Role::Student);
 
         $mockRepo = $this->getMockBuilder('App\Domain\Repository\IUserRepository')
-            ->onlyMethods(array('getAll', 'getById', 'create', 'update', 'delete'))
+            ->onlyMethods(array('getAll', 'getById', 'create', 'update', 'delete', 'getByLogin'))
             ->getMock();
         $mockRepo
             ->expects($this->once())

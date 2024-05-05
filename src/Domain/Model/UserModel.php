@@ -5,7 +5,7 @@ namespace App\Domain\Model;
 /**
  * Сущность пользователя
  */
-readonly class UserModel
+class UserModel
 {
     /**
      * @param int $id id пользователя
@@ -62,5 +62,10 @@ readonly class UserModel
     public function getRole(): Role
     {
         return $this->role;
+    }
+
+    public function setPassword(string $password): void
+    {
+        $this->password = $password;
     }
 }

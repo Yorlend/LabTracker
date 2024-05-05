@@ -79,4 +79,18 @@ class MSUserRepository implements IUserRepository
             Role::from($user->getRole())
         );
     }
+
+    public function getByLogin(string $login): UserModel
+    {
+        $user = $this->entityManager->getRepository(User::class)->findOneBy(
+            ['login' => $login]
+        );
+        return new UserModel(
+            $user->getId(),
+            $user->getUserName(),
+            $user->getLogin(),
+            $user->getPassword(),
+            Role::from($user->getRole())
+        );
+    }
 }

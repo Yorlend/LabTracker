@@ -2,6 +2,7 @@
 
 namespace App\Api\Controller;
 
+use App\Api\Auth\User;
 use App\Api\Request\Solution\CommentStoreRequest;
 use App\Api\Request\Solution\StoreRequest;
 use App\Api\Request\Solution\UpdateRequest;
@@ -10,6 +11,7 @@ use App\Api\Response\NoContentResponse;
 use App\Api\Response\Solution\IndexCommentResponse;
 use App\Api\Response\Solution\IndexResponse;
 use App\Api\Response\Solution\ShowResponse;
+use App\Domain\Error\AccessDeniedError;
 use App\Domain\Model\FileModel;
 use App\Domain\Model\SolutionState;
 use App\Domain\Service\CommentService;
@@ -18,6 +20,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\CurrentUser;
 
 #[Route('/solutions')]
 class SolutionController extends AbstractController
@@ -27,10 +30,11 @@ class SolutionController extends AbstractController
     }
 
     #[Route('', methods: ['POST'])]
-    public function store(StoreRequest $request): IdStoreResponse
+    public function store(#[CurrentUser] User $user, StoreRequest $request): IdStoreResponse
     {
-        // todo add curent user id
-        $id = $this->service->create($request->description, SolutionState::Checking, $request->labId, 0);
+        $this->denyAccessUnlessGranted('ROLE_STUDENT');
+
+        $id = $this->service->create($request->description, SolutionState::Checking, $request->labId, $user->getId());
 
         return new IdStoreResponse($id);
     }
@@ -54,25 +58,52 @@ class SolutionController extends AbstractController
         return new ShowResponse($solution);
     }
 
+    /**
+     * @throws AccessDeniedError
+     */
     #[Route('/{id}', requirements: ['id' => '\d+'], methods: ['DELETE'])]
-    public function delete(int $id): NoContentResponse
+    public function delete(#[CurrentUser] User $user, int $id): NoContentResponse
     {
+        $this->denyAccessUnlessGranted('ROLE_STUDENT');
+
+        if (!$this->service->isOwner($user->getId(), $id)) {
+            throw new AccessDeniedError();
+        }
+
         $this->service->delete($id);
 
         return new NoContentResponse();
     }
 
+    /**
+     * @throws AccessDeniedError
+     */
     #[Route('/{id}', requirements: ['id' => '\d+'], methods: ['PATCH'])]
-    public function updateDesc(int $id, UpdateRequest $request): NoContentResponse
+    public function updateDesc(#[CurrentUser] User $user, int $id, UpdateRequest $request): NoContentResponse
     {
+        $this->denyAccessUnlessGranted('ROLE_STUDENT');
+
+        if (!$this->service->isOwner($user->getId(), $id)) {
+            throw new AccessDeniedError();
+        }
+
         $this->service->update($id, $request->description, SolutionState::from($request->state));
 
         return new NoContentResponse();
     }
 
+    /**
+     * @throws AccessDeniedError
+     */
     #[Route('/{id}/files', requirements: ['id' => '\d+'], methods: ['POST'])]
-    public function updateFiles(int $id, Request $request): NoContentResponse
+    public function updateFiles(#[CurrentUser] User $user, int $id, Request $request): NoContentResponse
     {
+        $this->denyAccessUnlessGranted('ROLE_STUDENT');
+
+        if (!$this->service->isOwner($user->getId(), $id)) {
+            throw new AccessDeniedError();
+        }
+
         $tmpDst = $this->getParameter('kernel.project_dir') . '/uploads';
 
         $uploadedFiles = $request->files->keys();
@@ -99,25 +130,38 @@ class SolutionController extends AbstractController
     }
 
     #[Route('/{id}/comments', requirements: ['id' => '\d+'], methods: ['POST'])]
-    public function addComment(int $id, CommentStoreRequest $request): IdStoreResponse
+    public function addComment(#[CurrentUser] User $user, int $id, CommentStoreRequest $request): IdStoreResponse
     {
-        // todo add curent user id
-        $commentId = $this->commentService->create($id, $request->text);
+        $commentId = $this->commentService->create($id, $request->text, $user->getId());
 
         return new IdStoreResponse($commentId);
     }
 
+    /**
+     * @throws AccessDeniedError
+     */
     #[Route('/{id}/comments/{commentId}', requirements: ['id' => '\d+', 'commentId' => '\d+'], methods: ['PUT'])]
-    public function updateComment(int $id, int $commentId, CommentStoreRequest $request): NoContentResponse
+    public function updateComment(#[CurrentUser] User $user, int $id, int $commentId, CommentStoreRequest $request): NoContentResponse
     {
+        if (!$this->commentService->isOwner($user->getId(), $commentId)) {
+            throw new AccessDeniedError();
+        }
+
         $this->commentService->update($commentId, $request->text);
 
         return new NoContentResponse();
     }
 
+    /**
+     * @throws AccessDeniedError
+     */
     #[Route('/{id}/comments/{commentId}', requirements: ['id' => '\d+', 'commentId' => '\d+'], methods: ['PUT'])]
-    public function deleteComment(int $id, int $commentId): NoContentResponse
+    public function deleteComment(#[CurrentUser] User $user, int $id, int $commentId): NoContentResponse
     {
+        if (!$this->commentService->isOwner($user->getId(), $commentId)) {
+            throw new AccessDeniedError();
+        }
+
         $this->commentService->delete($commentId);
 
         return new NoContentResponse();

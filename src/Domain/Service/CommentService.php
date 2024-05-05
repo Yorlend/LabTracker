@@ -69,4 +69,15 @@ class CommentService
     {
         $this->repository->delete($id);
     }
+
+    /**
+     * Проверка id создателя
+     *
+     * @param int $userId id предполагаемого создателя
+     * @param int $commentId id комментария
+     * @return bool является ли пользователь создателем
+     */
+    public function isOwner(int $userId, int $commentId): bool{
+        return $this->repository->isOwner($userId, $commentId);
+    }
 }

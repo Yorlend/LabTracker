@@ -2,6 +2,7 @@
 
 namespace App\Data;
 
+use App\Domain\Error\NotFoundError;
 use App\Domain\Model\UserModel;
 use App\Domain\Repository\ISolutionRepository;
 use App\Domain\Model\SolutionModel;
@@ -93,5 +94,19 @@ class MSSolutionRepository implements ISolutionRepository
             ),
             $sol->getFilesAdded()->getValues()
         );
+    }
+
+    /**
+     * @throws NotFoundError
+     */
+    public function isOwner(int $userId, int $solId): bool
+    {
+        $sol = $this->entityManager->getRepository(Solution::class)->findOneBy(
+            ['id' => $solId]
+        );
+
+        if ($sol == null) throw new NotFoundError("No solution with id {$solId}");
+
+        return $userId == $sol->getUserId()->getId();
     }
 }

@@ -24,7 +24,7 @@ class LabServiceTest extends TestCase
         );
 
         $mockRepo = $this->getMockBuilder('App\Domain\Repository\ILabRepository')
-            ->onlyMethods(array('getAll', 'getById', 'create', 'update', 'delete'))
+            ->onlyMethods(array('getAll', 'getById', 'create', 'update', 'delete', 'isTeacher'))
             ->getMock();
         $mockRepo
             ->expects($this->once())
@@ -61,7 +61,7 @@ class LabServiceTest extends TestCase
         )];
 
         $mockRepo = $this->getMockBuilder('App\Domain\Repository\ILabRepository')
-            ->onlyMethods(array('getAll', 'getById', 'create', 'update', 'delete'))
+            ->onlyMethods(array('getAll', 'getById', 'create', 'update', 'delete', 'isTeacher'))
             ->getMock();
         $mockRepo
             ->expects($this->once())
@@ -97,7 +97,7 @@ class LabServiceTest extends TestCase
         );
 
         $mockRepo = $this->getMockBuilder('App\Domain\Repository\ILabRepository')
-            ->onlyMethods(array('getAll', 'getById', 'create', 'update', 'delete'))
+            ->onlyMethods(array('getAll', 'getById', 'create', 'update', 'delete', 'isTeacher'))
             ->getMock();
         $mockRepo
             ->expects($this->once())
@@ -123,7 +123,7 @@ class LabServiceTest extends TestCase
     public function testDelete(): void
     {
         $mockRepo = $this->getMockBuilder('App\Domain\Repository\ILabRepository')
-            ->onlyMethods(array('getAll', 'getById', 'create', 'update', 'delete'))
+            ->onlyMethods(array('getAll', 'getById', 'create', 'update', 'delete', 'isTeacher'))
             ->getMock();
         $mockRepo
             ->expects($this->once())
@@ -157,7 +157,7 @@ class LabServiceTest extends TestCase
         );
 
         $mockRepo = $this->getMockBuilder('App\Domain\Repository\ILabRepository')
-            ->onlyMethods(array('getAll', 'getById', 'create', 'update', 'delete'))
+            ->onlyMethods(array('getAll', 'getById', 'create', 'update', 'delete', 'isTeacher'))
             ->getMock();
         $mockRepo
             ->expects($this->once())
@@ -189,7 +189,7 @@ class LabServiceTest extends TestCase
         );
 
         $mockRepo = $this->getMockBuilder('App\Domain\Repository\ILabRepository')
-            ->onlyMethods(array('getAll', 'getById', 'create', 'update', 'delete'))
+            ->onlyMethods(array('getAll', 'getById', 'create', 'update', 'delete', 'isTeacher'))
             ->getMock();
         $mockRepo
             ->expects($this->once())
