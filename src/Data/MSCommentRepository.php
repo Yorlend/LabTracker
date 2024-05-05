@@ -26,11 +26,16 @@ class MSCommentRepository implements ICommentRepository
     {
         $comment = new Comment();
 
-        $comment->setSolutionId($this->entityManager->getRepository(Solution::class)->findOneBy(['id' == $solutionId]));
+        $sol = $this->entityManager->getRepository(Solution::class)->findOneBy(['id' == $solutionId]);
+        if ($sol == null) throw new NotFoundError("No solution with id {$solutionId}");
+        $comment->setSolutionId($sol);
+        
         $comment->setText($text);
         $now = new DateTime("now");
         $comment->setData($now);
-        $comment->setUserId($this->entityManager->getRepository(User::class)->findOneBy(['id' == $userId]));
+        $user = $this->entityManager->getRepository(User::class)->findOneBy(['id' == $userId]);
+        if ($user == null) throw new NotFoundError("No user with id {$userId}");
+        $comment->setUserId($user);
 
         $this->entityManager->persist($comment);
         $this->entityManager->flush();
@@ -52,13 +57,13 @@ class MSCommentRepository implements ICommentRepository
     public function getBySolutionId(int $solutionId): array
     {
         return $this->entityManager->getRepository(Comment::class)->findBy(
-            ['solution_id' => $solutionId]
-        );
+            ['solution_id' => $solutionId]);
     }
 
     public function update(int $id, string $text): void
     {
         $comment = $this->entityManager->getRepository(Comment::class)->find($id);
+        if ($comment == null) throw new NotFoundError("No comment with id {$id}");
         $comment->setText($text);
         $this->entityManager->flush();
     }
@@ -66,6 +71,7 @@ class MSCommentRepository implements ICommentRepository
     public function delete(int $id): void
     {
         $comment = $this->entityManager->getRepository(Comment::class)->find($id);
+        if ($comment == null) throw new NotFoundError("No comment with id {$id}");
         $this->entityManager->remove($comment);
         $this->entityManager->flush();
     }

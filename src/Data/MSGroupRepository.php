@@ -2,6 +2,7 @@
 
 namespace App\Data;
 
+use App\Domain\Error\NotFoundError;
 use App\Domain\Model\GroupModel;
 use App\Domain\Model\LabModel;
 use App\Domain\Repository\IGroupRepository;
@@ -23,7 +24,9 @@ class MSGroupRepository implements IGroupRepository
         $usgr = new UserGroup();
 
         $group->setName($name);
-        $group->setTeacherId($this->entityManager->getRepository(User::class)->find($teacherId));
+        $teach = $this->entityManager->getRepository(User::class)->find($teacherId);
+        if ($teach == null) throw new NotFoundError("No user with id {$teacherId}");
+        $group->setTeacherId($teach);
         
         foreach ($users as &$usr)
             if ($this->entityManager->getRepository(User::class)->find($usr))
@@ -49,9 +52,11 @@ class MSGroupRepository implements IGroupRepository
     public function update(int $id, string $name, int $teacherId): void
     {
         $group = $this->entityManager->getRepository(Group::class)->find($id);
+        if ($group == null) throw new NotFoundError("No group with id {$id}");
         $group->setName($name);
         if ($this->entityManager->getRepository(User::class)->find($teacherId) != null)
             $group->setTeacherId($this->entityManager->getRepository(User::class)->find($teacherId));
+        else throw new NotFoundError("No user with id {$teacherId}");
 
         $this->entityManager->flush();
     }
@@ -59,6 +64,7 @@ class MSGroupRepository implements IGroupRepository
     public function delete(int $id): void
     {
         $group = $this->entityManager->getRepository(Group::class)->find($id);
+        if ($group == null) throw new NotFoundError("No group with id {$id}");
         $this->entityManager->remove($group);
         $this->entityManager->flush();
     }
@@ -73,6 +79,7 @@ class MSGroupRepository implements IGroupRepository
         $group = $this->entityManager->getRepository(Group::class)->findOneBy(
             ['id' => $id]
         );
+        if ($group == null) throw new NotFoundError("No group with id {$id}");
 
         return new GroupModel(
             $id,
@@ -87,6 +94,7 @@ class MSGroupRepository implements IGroupRepository
         $usgr = $this->entityManager->getRepository(UserGroup::class)->findOneBy(
             ['group_id' => $groupId]
         );
+        if ($usgr == null) throw new NotFoundError("No UserGroup with group_id {$groupId}");
         foreach ($usersId as &$usr)
             if ($this->entityManager->getRepository(User::class)->find($usr))
                 $usgr->addUserId($this->entityManager->getRepository(User::class)->find($usr));
@@ -99,6 +107,7 @@ class MSGroupRepository implements IGroupRepository
         $usgr = $this->entityManager->getRepository(UserGroup::class)->findOneBy(
             ['group_id' => $groupId]
         );
+        if ($usgr == null) throw new NotFoundError("No UserGroup with group_id {$groupId}");
         foreach ($usersId as &$usr)
             $usgr->removeUserId($usr);
         
@@ -110,6 +119,7 @@ class MSGroupRepository implements IGroupRepository
         $group = $this->entityManager->getRepository(Group::class)->findOneBy(
             ['id' => $groupId]
         );
+        if ($group == null) throw new NotFoundError("No group with id {$groupId}");
 
         if ($this->entityManager->getRepository(Lab::class)->find($labId) != null)
             $group->addIssuedLab($this->entityManager->getRepository(Lab::class)->find($labId));
@@ -122,6 +132,7 @@ class MSGroupRepository implements IGroupRepository
         $group = $this->entityManager->getRepository(Group::class)->findOneBy(
             ['id' => $groupId]
         );
+        if ($group == null) throw new NotFoundError("No group with id {$groupId}");
 
         $group->removeIssuedLab($this->entityManager->getRepository(Lab::class)->find($labId));
 

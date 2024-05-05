@@ -27,8 +27,10 @@ class MSSolutionRepository implements ISolutionRepository
         $sol->setDescription($description);
         $sol->setState($state->value);
         $lab = $this->entityManager->getRepository(Lab::class)->find($labId);
+        if ($lab == null) throw new NotFoundError("No lab with id {$labId}");
         $sol->setLabId($lab);
         $usr = $this->entityManager->getRepository(User::class)->find($labId);
+        if ($usr == null) throw new NotFoundError("No user with id {$userId}");
         $sol->setUserId($usr);
 
         $this->entityManager->persist($sol);
@@ -53,6 +55,7 @@ class MSSolutionRepository implements ISolutionRepository
     public function update(int $id, string $description, SolutionState $state): void
     {
         $sol = $this->entityManager->getRepository(Solution::class)->find($id);
+        if ($sol == null) throw new NotFoundError("No solution with id {$id}");
         $sol->setDescription($description);
         $sol->setState($state->value);
 
@@ -61,17 +64,28 @@ class MSSolutionRepository implements ISolutionRepository
 
     public function delete(int $id): void
     {
-        $user = $this->entityManager->getRepository(Solution::class)->find($id);
-        $this->entityManager->remove($user);
+        $sol = $this->entityManager->getRepository(Solution::class)->find($id);
+        if ($sol == null) throw new NotFoundError("No solution with id {$id}");
+        $this->entityManager->remove($sol);
         $this->entityManager->flush();
     }
 
     public function getAll(?int $labId, ?SolutionState $state): array
     {
-        return $this->entityManager->getRepository(Solution::class)->findBy(
-            ['lab_id' => $labId,
-            'state' => $state]
-        );
+        if ($labId != null && $state != null)
+            return $this->entityManager->getRepository(Solution::class)->findBy(
+                ['lab_id' => $labId,
+                'state' => $state]
+            );
+        else if ($labId != null && $state == null)
+            return $this->entityManager->getRepository(Solution::class)->findBy(
+                ['lab_id' => $labId]
+            );
+        else if ($labId == null && $state != null)
+            return $this->entityManager->getRepository(Solution::class)->findBy(
+                ['state' => $state]
+            );
+        return $this->entityManager->getRepository(Solution::class)->findAll();
     }
 
     public function getById(int $id): SolutionModel
@@ -79,6 +93,7 @@ class MSSolutionRepository implements ISolutionRepository
         $sol = $this->entityManager->getRepository(Solution::class)->findOneBy(
             ['id' => $id]
         );
+        if ($sol == null) throw new NotFoundError("No solution with id {$id}");
 
         return new SolutionModel(
             $sol->getId(),

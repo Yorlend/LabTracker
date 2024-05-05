@@ -2,6 +2,7 @@
 
 namespace App\Data;
 
+use App\Domain\Error\NotFoundError;
 use App\Domain\Repository\IUserRepository;
 use App\Domain\Model\Role;
 use App\Domain\Model\UserModel;
@@ -40,6 +41,7 @@ class MSUserRepository implements IUserRepository
     public function update(int $id, UserModel $user): void
     {
         $user1 = $this->entityManager->getRepository(User::class)->find($id);
+        if ($user1 == null) throw new NotFoundError("No user with id {$id}");
         $user1->setLogin($user->getLogin());
         $user1->setPassword($user->getPassword());
         $user1->setRole($user->getRole()->value);
@@ -51,6 +53,7 @@ class MSUserRepository implements IUserRepository
     public function delete(int $id): void
     {
         $user = $this->entityManager->getRepository(User::class)->find($id);
+        if ($user == null) throw new NotFoundError("No user with id {$id}");
         $this->entityManager->remove($user);
         $this->entityManager->flush();
     }
@@ -61,9 +64,24 @@ class MSUserRepository implements IUserRepository
         //     ['group_id' == $groupId],
         //     ['role' == $role]
         // );
-        return $this->entityManager->getRepository(UserGroup::class)->findOneBy(
-            ['group_id' => $groupId]
-        )->getUserId()->toArray();
+        if ($groupId == null && $role == null)
+            return $this->entityManager->getRepository(User::class)->findAll();
+        else if ($role == null)
+            return $this->entityManager->getRepository(UserGroup::class)->findOneBy(
+                ['group_id' => $groupId]
+            )->getUserId()->toArray();
+        else if ($role != null && $groupId == null)
+            return $this->entityManager->getRepository(User::class)->findBy(
+                ['role' => $role->value]
+            );
+        $arr = $this->entityManager->getRepository(UserGroup::class)->findOneBy(
+            ['group_id' == $groupId])->getUserId()->toArray();
+
+        $ret = array();
+        foreach ($arr as &$el)
+            if ($el->role == $role)
+                array_push($ret, $el);
+        return $ret;
     }
 
     public function getById(int $id): UserModel
@@ -71,6 +89,7 @@ class MSUserRepository implements IUserRepository
         $user = $this->entityManager->getRepository(User::class)->findOneBy(
             ['id' => $id]
         );
+        if ($user == null) throw new NotFoundError("No user with id {$id}");
         return new UserModel(
             $user->getId(),
             $user->getUserName(),
@@ -85,6 +104,7 @@ class MSUserRepository implements IUserRepository
         $user = $this->entityManager->getRepository(User::class)->findOneBy(
             ['login' => $login]
         );
+        if ($user == null) throw new NotFoundError("No user with login {$login}");
         return new UserModel(
             $user->getId(),
             $user->getUserName(),
