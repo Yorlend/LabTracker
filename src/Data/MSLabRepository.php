@@ -23,6 +23,7 @@ class MSLabRepository implements ILabRepository
         $lab->setDescription($description);
         if ($this->entityManager->getRepository(Group::class)->find($groupId) != null)
             $lab->addGroupId($this->entityManager->getRepository(Group::class)->find($groupId));
+        else throw new NotFoundError("No group with id {$groupId}");
 
         $this->entityManager->persist($lab);
         $this->entityManager->flush();
@@ -39,10 +40,12 @@ class MSLabRepository implements ILabRepository
     public function update(int $id, string $name, string $description, int $groupId): void
     {
         $lab = $this->entityManager->getRepository(Lab::class)->find($id);
+        if ($lab == null) throw new NotFoundError("No lab with id {$id}");
         $lab->setDescription($description);
         $lab->setName($name);
         if ($this->entityManager->getRepository(Group::class)->find($groupId) != null)
             $lab->addGroupId($this->entityManager->getRepository(Group::class)->find($groupId));
+        else throw new NotFoundError("No group with id {$groupId}");
 
         $this->entityManager->flush();
     }
@@ -50,6 +53,7 @@ class MSLabRepository implements ILabRepository
     public function delete(int $id): void
     {
         $lab = $this->entityManager->getRepository(Lab::class)->find($id);
+        if ($lab == null) throw new NotFoundError("No lab with id {$id}");
         $this->entityManager->remove($lab);
         $this->entityManager->flush();
     }
@@ -66,6 +70,7 @@ class MSLabRepository implements ILabRepository
         $lab = $this->entityManager->getRepository(Lab::class)->findOneBy(
             ['id' => $id]
         );
+        if ($lab == null) throw new NotFoundError("No lab with id {$id}");
 
         return new LabModel(
             $id,
