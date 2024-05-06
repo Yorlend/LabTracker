@@ -5,6 +5,9 @@ namespace App\Domain\Storage\Mock;
 use App\Domain\Model\FileModel;
 use App\Domain\Storage\ILabFileStorage;
 
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
+
 class FSLabFileStorage implements ILabFileStorage
 {
 
@@ -22,6 +25,17 @@ class FSLabFileStorage implements ILabFileStorage
 
     public function clearLabFiles(int $groupID, int $labId): void
     {
-
+        $path = $this->pathPrefix . "/$groupID" . "/$labId/";
+        $it = new RecursiveDirectoryIterator($path, RecursiveDirectoryIterator::SKIP_DOTS);
+        $files = new RecursiveIteratorIterator($it,
+                    RecursiveIteratorIterator::CHILD_FIRST);
+        foreach($files as $file) {
+            if ($file->isDir()){
+                rmdir($file->getPathname());
+            } else {
+                unlink($file->getPathname());
+            }
+        }
+        rmdir($path);
     }
 }
