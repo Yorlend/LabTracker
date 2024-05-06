@@ -24,7 +24,7 @@ class MSSolutionRepository extends ServiceEntityRepository implements ISolutionR
         private EntityManagerInterface $entityManager, ManagerRegistry $registry
     )
     {
-        parent::__construct($registry, Comment::class);
+        parent::__construct($registry, Solution::class);
     }
 
     public function create(string $description, SolutionState $state, int $labId, int $userId): SolutionModel

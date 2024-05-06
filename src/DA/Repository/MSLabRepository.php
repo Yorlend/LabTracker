@@ -19,7 +19,7 @@ class MSLabRepository extends ServiceEntityRepository implements ILabRepository
         private EntityManagerInterface $entityManager, ManagerRegistry $registry
     )
     {
-        parent::__construct($registry, Comment::class);
+        parent::__construct($registry, Lab::class);
     }
 
     public function create(string $name, string $description, int $groupId): LabModel
@@ -70,19 +70,18 @@ class MSLabRepository extends ServiceEntityRepository implements ILabRepository
 
     public function getAll(?int $groupId): array
     {
-        $criteria = [];
-        if ($groupId != null){
-            $criteria[] =['group_id' => $groupId];
+        if ($groupId != null) {
+            $data = $this->entityManager->getRepository(Lab::class)->findBy(
+                ['group_id' => $groupId]
+            );
+        } else {
+            $data = $this->entityManager->getRepository(Lab::class)->findAll();
         }
 
-        $data = $this->entityManager->getRepository(Lab::class)->findBy(
-            $criteria
-        );
-
         $res = [];
-        foreach ($data as $lab){
+        foreach ($data as $lab) {
             $files = [];
-            foreach ($lab->files as $file){
+            foreach ($lab->files as $file) {
                 $files[] = new FileModel(
                     $file->id,
                     $file->name,
@@ -109,14 +108,14 @@ class MSLabRepository extends ServiceEntityRepository implements ILabRepository
         $lab = $this->entityManager->getRepository(Lab::class)->find($id);
         if ($lab == null) throw new NotFoundError("No lab with id {$id}");
 
-        $files =[];
-        foreach ($lab->files as $file){
+        $files = [];
+        foreach ($lab->files as $file) {
             $files[] = new FileModel(
                 $file->id,
                 $file->name,
                 $file->path,
                 $file->lab->id,
-                $file->solution->id
+                null
             );
         }
 

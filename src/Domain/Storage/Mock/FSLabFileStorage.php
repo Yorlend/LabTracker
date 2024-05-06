@@ -26,6 +26,8 @@ class FSLabFileStorage implements ILabFileStorage
     public function clearLabFiles(int $groupID, int $labId): void
     {
         $path = $this->pathPrefix . "/$groupID" . "/$labId/";
+        if(!is_dir($path)) return;
+
         $it = new RecursiveDirectoryIterator($path, RecursiveDirectoryIterator::SKIP_DOTS);
         $files = new RecursiveIteratorIterator($it,
                     RecursiveIteratorIterator::CHILD_FIRST);

@@ -381,20 +381,6 @@ paths:
         500:
           $ref: '#/components/responses/500'
 
-    delete:
-      tags:
-        - group
-      security:
-        - bearerAuth: [ ]
-      summary: Remove lab from group
-      responses:
-        204:
-          $ref: '#/components/responses/204'
-        404:
-          $ref: '#/components/responses/404'
-        500:
-          $ref: '#/components/responses/500'
-
 
   /labs:
     post:

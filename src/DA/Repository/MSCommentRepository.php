@@ -59,8 +59,11 @@ class MSCommentRepository extends ServiceEntityRepository implements ICommentRep
 
     public function getBySolutionId(int $solutionId): array
     {
+        $sol = $this->entityManager->getRepository(Solution::class)->find($solutionId);
+        if ($sol == null) throw new NotFoundError("No solution with id {$solutionId}");
+
         $data = $this->entityManager->getRepository(Comment::class)->findBy(
-            ['solution_id' => $solutionId]);
+            ['solution' => $sol]);
 
         $res = [];
         foreach ($data as $comment) {

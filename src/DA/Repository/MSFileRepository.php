@@ -19,7 +19,7 @@ class MSFileRepository extends ServiceEntityRepository implements IFileRepositor
         private EntityManagerInterface $entityManager, ManagerRegistry $registry
     )
     {
-        parent::__construct($registry, Comment::class);
+        parent::__construct($registry, File::class);
     }
 
     public function createForLab(string $path, string $name, int $labId): FileModel

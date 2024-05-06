@@ -45,7 +45,6 @@ class MSUserRepository extends ServiceEntityRepository implements IUserRepositor
         $updatedUser = $this->entityManager->getRepository(User::class)->find($id);
         if ($updatedUser == null) throw new NotFoundError("No user with id {$id}");
         $updatedUser->user_name = $user->getUserName();
-        $updatedUser->login = $user->getLogin();
         $updatedUser->password = $user->getPassword();
         $updatedUser->role = $user->getRole()->value;
 

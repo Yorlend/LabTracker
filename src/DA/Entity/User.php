@@ -41,6 +41,8 @@ class User
      */
     #[ORM\ManyToMany(targetEntity: Group::class, inversedBy: 'users')]
     #[ORM\JoinTable(name: 'users_groups')]
+    #[ORM\JoinColumn(name: "user_id", referencedColumnName: "id")]
+    #[ORM\InverseJoinColumn(name: "group_id", referencedColumnName: "id")]
     public Collection $groups;
 
     /**
