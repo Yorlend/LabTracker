@@ -60,7 +60,7 @@ class LabController extends AbstractController
     {
         $this->denyAccessUnlessGranted('ROLE_TEACHER');
 
-        if (!$this->service->isTeacher($user->getId(), $id)) {
+        if ($user->getRoles()[0] != 'ROLE_ADMIN' && !$this->service->isTeacher($user->getId(), $id)) {
             throw new AccessDeniedError();
         }
 
@@ -77,7 +77,7 @@ class LabController extends AbstractController
     {
         $this->denyAccessUnlessGranted('ROLE_TEACHER');
 
-        if (!$this->service->isTeacher($user->getId(), $id)) {
+        if ($user->getRoles()[0] != 'ROLE_ADMIN' && !$this->service->isTeacher($user->getId(), $id)) {
             throw new AccessDeniedError();
         }
 
@@ -96,11 +96,9 @@ class LabController extends AbstractController
     {
         $this->denyAccessUnlessGranted('ROLE_TEACHER');
 
-        if (!$this->service->isTeacher($user->getId(), $id)) {
+        if ($user->getRoles()[0] != 'ROLE_ADMIN' && !$this->service->isTeacher($user->getId(), $id)) {
             throw new AccessDeniedError();
         }
-
-        $this->service->delete($id);
 
         $tmpDst = $this->getParameter('kernel.project_dir') . '/uploads';
 

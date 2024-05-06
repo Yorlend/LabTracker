@@ -19,7 +19,7 @@ class MSGroupRepository extends ServiceEntityRepository implements IGroupReposit
         private EntityManagerInterface $entityManager, ManagerRegistry $registry
     )
     {
-        parent::__construct($registry, Comment::class);
+        parent::__construct($registry, Group::class);
     }
 
     public function create(string $name, array $usersIds, int $teacherId): GroupModel
@@ -36,7 +36,8 @@ class MSGroupRepository extends ServiceEntityRepository implements IGroupReposit
         $group->name = $name;
         $group->teacher = $teacher;
         foreach ($users as $user) {
-            $group->users->add($user);
+            $group->users[] = $user;
+            $user->groups[] =$group;
         }
 
         $this->entityManager->persist($group);
@@ -80,7 +81,7 @@ class MSGroupRepository extends ServiceEntityRepository implements IGroupReposit
         foreach ($data as $group) {
             $userIds = array_map(function ($entry) {
                 return $entry->id;
-            }, $group->users);
+            }, $group->users->toArray());
 
             $res[] = new GroupModel(
                 $group->id,
@@ -100,7 +101,7 @@ class MSGroupRepository extends ServiceEntityRepository implements IGroupReposit
 
         $userIds = array_map(function ($entry) {
             return $entry->id;
-        }, $group->users);
+        }, $group->users->toArray());
 
         return new GroupModel(
             $group->id,
