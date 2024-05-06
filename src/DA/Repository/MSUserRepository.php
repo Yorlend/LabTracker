@@ -3,6 +3,7 @@
 namespace App\DA\Repository;
 
 use App\DA\Entity\User;
+use App\DA\Entity\Group;
 use App\Domain\Error\NotFoundError;
 use App\Domain\Model\Role;
 use App\Domain\Model\UserModel;
@@ -61,41 +62,63 @@ class MSUserRepository extends ServiceEntityRepository implements IUserRepositor
 
     public function getAll(int|null $groupId, Role|null $role): array
     {
-//        // return $this->entityManager->getRepository(User::class)->findBy(
-//        //     ['group_id' == $groupId],
-//        //     ['role' == $role]
-//        // );
-//        if ($groupId == null && $role == null)
-//            return $this->entityManager->getRepository(User::class)->findAll();
-//        else if ($role == null)
-//            return $this->entityManager->getRepository(UserGroup::class)->findOneBy(
-//                ['group_id' => $groupId]
-//            )->getUserId()->toArray();
-//        else if ($role != null && $groupId == null)
-//            return $this->entityManager->getRepository(User::class)->findBy(
-//                ['role' => $role->value]
-//            );
-//        $arr = $this->entityManager->getRepository(UserGroup::class)->findOneBy(
-//            ['group_id' == $groupId])->getUserId()->toArray();
-//
-//        $ret = array();
-//        foreach ($arr as &$el)
-//            if ($el->role == $role)
-//                array_push($ret, $el);
-//        return $ret;
-
-        $data = $this->entityManager->getRepository(User::class)->findAll();
 
         $res = [];
-        foreach ($data as $user) {
-            $res[] = new UserModel(
-                $user->id,
-                $user->user_name,
-                $user->login,
-                $user->password,
-                Role::from($user->role),
-            );
+        if ($groupId == null && $role == null) {
+            $data = $this->entityManager->getRepository(User::class)->findAll();
+            foreach ($data as $user) {
+                $res[] = new UserModel(
+                    $user->id,
+                    $user->user_name,
+                    $user->login,
+                    $user->password,
+                    Role::from($user->role),
+                );
+            }
         }
+        elseif ($groupId != null && $role == null) {
+            $data = $this->entityManager->getRepository(Group::class)->find($groupId)->users;
+            foreach ($data as $user) {
+                $res[] = new UserModel(
+                    $user->id,
+                    $user->user_name,
+                    $user->login,
+                    $user->password,
+                    Role::from($user->role),
+                );
+            }
+        }
+        elseif ($groupId == null && $role != null) {
+            $data = $this->entityManager->getRepository(User::class)->findAll();
+            foreach ($data as $user) {
+                if (Role::from($user->role) == $role)
+                {
+                    $res[] = new UserModel(
+                        $user->id,
+                        $user->user_name,
+                        $user->login,
+                        $user->password,
+                        Role::from($user->role),
+                    );
+                }
+            }
+        }
+        else {
+            $data = $this->entityManager->getRepository(Group::class)->find($groupId)->users;
+            foreach ($data as $user) {
+                if (Role::from($user->role) == $role)
+                {
+                    $res[] = new UserModel(
+                        $user->id,
+                        $user->user_name,
+                        $user->login,
+                        $user->password,
+                        Role::from($user->role),
+                    );
+                }
+            }
+        }
+
 
         return $res;
     }

@@ -88,7 +88,7 @@ class MSCommentRepository extends ServiceEntityRepository implements ICommentRep
     {
         $comment = $this->entityManager->getRepository(Comment::class)->find($id);
         if ($comment == null) throw new NotFoundError("No comment with id {$id}");
-        $comment->setText($text);
+        $comment->text = $text;
 
         $this->entityManager->flush();
     }
