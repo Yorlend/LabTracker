@@ -57,8 +57,8 @@ interface IFileRepository
     /**
      * Удалить все дескрипторы решения
      *
-     * @param int $labId id решения, для которого удаляются файлы
+     * @param int $solId id решения, для которой удаляются файлы
      * @return void
      */
-    public function deleteBySolutionID(int $labId): void;
+    public function deleteBySolutionID(int $solId): void;
 }

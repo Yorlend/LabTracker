@@ -7,9 +7,6 @@ use App\Domain\Model\LabModel;
 use App\Domain\Repository\IFileRepository;
 use App\Domain\Repository\ILabRepository;
 use App\Domain\Storage\ILabFileStorage;
-use App\Data\MSLabRepository;
-use App\Data\MSFileRepository;
-use App\Domain\Storage\Mock\FSLabFileStorage;
 
 /**
  * Сервис для работы с лабами

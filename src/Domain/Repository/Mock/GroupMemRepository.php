@@ -29,9 +29,9 @@ class GroupMemRepository implements IGroupRepository
         return $this->data[$id];
     }
 
-    public function create(string $name, array $users, int $teacherId): GroupModel
+    public function create(string $name, array $usersIds, int $teacherId): GroupModel
     {
-        $group = new GroupModel(count($this->data), $name, $users, $teacherId);
+        $group = new GroupModel(count($this->data), $name, $usersIds, $teacherId);
         $this->data[] = $group;
 
         return $group;
