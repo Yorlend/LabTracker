@@ -4,7 +4,7 @@ namespace App\Domain\Service;
 
 use App\Domain\Model\CommentModel;
 use App\Domain\Repository\ICommentRepository;
-use App\Data\MSCommentRepository;
+
 /**
  * Сервис для работы с комментариями
  */

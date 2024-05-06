@@ -30,13 +30,13 @@ interface IGroupRepository
      * Создать группу
      *
      * @param string $name имя группы
-     * @param int[] $users идентификаторы студентов
+     * @param int[] $usersIds идентификаторы студентов
      * @param int $teacherId идентификатор преподавателя
      * @return GroupModel
      */
     public function create(
         string $name,
-        array  $users,
+        array  $usersIds,
         int    $teacherId,
     ): GroupModel;
 

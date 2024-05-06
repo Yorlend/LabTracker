@@ -1,11 +1,11 @@
 <?php
 
-use App\Data\MSCommentRepository;
-use App\Data\MSFileRepository;
-use App\Data\MSGroupRepository;
-use App\Data\MSLabRepository;
-use App\Data\MSSolutionRepository;
-use App\Data\MSUserRepository;
+use App\DA\Repository\MSCommentRepository;
+use App\DA\Repository\MSFileRepository;
+use App\DA\Repository\MSGroupRepository;
+use App\DA\Repository\MSLabRepository;
+use App\DA\Repository\MSSolutionRepository;
+use App\DA\Repository\MSUserRepository;
 use App\Domain\Repository\ICommentRepository;
 use App\Domain\Repository\IFileRepository;
 use App\Domain\Repository\IGroupRepository;

@@ -5,7 +5,6 @@ namespace App\Domain\Service;
 use App\Domain\Model\Role;
 use App\Domain\Model\UserModel;
 use App\Domain\Repository\IUserRepository;
-use App\Data\MSUserRepository;
 
 /**
  * Сервис для работы с пользователями
