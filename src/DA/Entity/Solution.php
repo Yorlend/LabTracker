@@ -39,7 +39,7 @@ class Solution
     /**
      * @var Collection<int, File>
      */
-    #[ORM\OneToMany(targetEntity: File::class, mappedBy: 'lab')]
+    #[ORM\OneToMany(targetEntity: File::class, mappedBy: 'solution')]
     public Collection $files;
 
     public function __construct()

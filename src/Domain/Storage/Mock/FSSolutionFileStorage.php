@@ -14,26 +14,27 @@ class FSSolutionFileStorage implements ISolutionFileStorage
     public function save(int $labId, int $solutionId, FileModel $file): string
     {
         $path = $this->pathPrefix . "/$labId" . "/$solutionId/";
-        mkdir($path, recursive: true);
+        if(!is_dir($path)){
+            mkdir($path, recursive: true);
+        }
 
         copy($file->getPath(), $path . $file->getName());
 
-        return $path . $file->getName();
+        return $path;
     }
 
     public function clearSolutionFiles(int $labId, int $solutionId): void
     {
         $path = $this->pathPrefix . "/$labId" . "/$solutionId/";
-        $it = new RecursiveDirectoryIterator($path, RecursiveDirectoryIterator::SKIP_DOTS);
-        $files = new RecursiveIteratorIterator($it,
-                    RecursiveIteratorIterator::CHILD_FIRST);
+        if(!is_dir($path)) return;
+
+        $files = scandir($path);
         foreach($files as $file) {
-            if ($file->isDir()){
-                rmdir($file->getPathname());
-            } else {
-                unlink($file->getPathname());
-            }
+            if($file == "." || $file == "..") continue;
+            unlink($path . $file);
         }
+
         rmdir($path);
+        rmdir($this->pathPrefix . "/$labId");
     }
 }

@@ -100,9 +100,8 @@ class LabService
     public function updateFiles(int $id, array $files): void
     {
         $groupId = $this->repository->getById($id)->getGroupId();
-//        $this->fileStorage->clearLabFiles($groupId, $id);
+        $this->fileStorage->clearLabFiles($groupId, $id);
         $this->fileRepository->deleteByLabID($id);
-
 
         foreach ($files as $file) {
             $constPath = $this->fileStorage->save($groupId, $id, $file);

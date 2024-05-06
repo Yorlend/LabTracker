@@ -16,11 +16,13 @@ class FSLabFileStorage implements ILabFileStorage
     public function save(int $groupID, int $labId, FileModel $file): string
     {
         $path = $this->pathPrefix . "/$groupID" . "/$labId/";
-        mkdir($path, recursive: true);
+        if(!is_dir($path)){
+            mkdir($path, recursive: true);
+        }
 
         copy($file->getPath(), $path . $file->getName());
 
-        return $path . $file->getName();
+        return $path;
     }
 
     public function clearLabFiles(int $groupID, int $labId): void
@@ -28,16 +30,13 @@ class FSLabFileStorage implements ILabFileStorage
         $path = $this->pathPrefix . "/$groupID" . "/$labId/";
         if(!is_dir($path)) return;
 
-        $it = new RecursiveDirectoryIterator($path, RecursiveDirectoryIterator::SKIP_DOTS);
-        $files = new RecursiveIteratorIterator($it,
-                    RecursiveIteratorIterator::CHILD_FIRST);
+        $files = scandir($path);
         foreach($files as $file) {
-            if ($file->isDir()){
-                rmdir($file->getPathname());
-            } else {
-                unlink($file->getPathname());
-            }
+            if($file == "." || $file == "..") continue;
+            unlink($path . $file);
         }
+
         rmdir($path);
+        rmdir($this->pathPrefix . "/$groupID");
     }
 }

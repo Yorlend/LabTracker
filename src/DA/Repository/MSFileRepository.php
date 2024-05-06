@@ -50,7 +50,8 @@ class MSFileRepository extends ServiceEntityRepository implements IFileRepositor
         $sol = $this->entityManager->getRepository(Solution::class)->find($solutionId);
         if ($sol == null) throw new NotFoundError("No Solution with id {$solutionId}");
 
-        $file->name = $path . $name;
+        $file->name = $name;
+        $file->path = $path . $name;
         $file->solution = $sol;
 
         $this->entityManager->persist($file);
@@ -73,12 +74,13 @@ class MSFileRepository extends ServiceEntityRepository implements IFileRepositor
         $file = $this->entityManager->getRepository(File::class)->find($id);
         if ($file == null) throw new NotFoundError("No file with id {$id}");
 
+
         return new FileModel(
             $id,
             $file->name,
             $file->path,
-            $file->lab->id,
-            $file->solution->id
+            $file->lab != null ? $file->lab->id : null,
+            $file->solution != null ? $file->solution->id : null
         );
     }
 
