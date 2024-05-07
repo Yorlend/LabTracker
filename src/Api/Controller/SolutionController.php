@@ -66,7 +66,7 @@ class SolutionController extends AbstractController
     {
         $this->denyAccessUnlessGranted('ROLE_STUDENT');
 
-        if (!$this->service->isOwner($user->getId(), $id)) {
+        if ($user->getRoles()[0] != 'ROLE_ADMIN' && !$this->service->isOwner($user->getId(), $id)) {
             throw new AccessDeniedError();
         }
 
@@ -83,7 +83,7 @@ class SolutionController extends AbstractController
     {
         $this->denyAccessUnlessGranted('ROLE_STUDENT');
 
-        if (!$this->service->isOwner($user->getId(), $id)) {
+        if ($user->getRoles()[0] != 'ROLE_ADMIN' && !$this->service->isOwner($user->getId(), $id)) {
             throw new AccessDeniedError();
         }
 
@@ -100,7 +100,7 @@ class SolutionController extends AbstractController
     {
         $this->denyAccessUnlessGranted('ROLE_STUDENT');
 
-        if (!$this->service->isOwner($user->getId(), $id)) {
+        if ($user->getRoles()[0] != 'ROLE_ADMIN' && !$this->service->isOwner($user->getId(), $id)) {
             throw new AccessDeniedError();
         }
 
@@ -143,7 +143,7 @@ class SolutionController extends AbstractController
     #[Route('/{id}/comments/{commentId}', requirements: ['id' => '\d+', 'commentId' => '\d+'], methods: ['PUT'])]
     public function updateComment(#[CurrentUser] User $user, int $id, int $commentId, CommentStoreRequest $request): NoContentResponse
     {
-        if (!$this->commentService->isOwner($user->getId(), $commentId)) {
+        if ($user->getRoles()[0] != 'ROLE_ADMIN' && !$this->commentService->isOwner($user->getId(), $commentId)) {
             throw new AccessDeniedError();
         }
 
@@ -158,7 +158,7 @@ class SolutionController extends AbstractController
     #[Route('/{id}/comments/{commentId}', requirements: ['id' => '\d+', 'commentId' => '\d+'], methods: ['PUT'])]
     public function deleteComment(#[CurrentUser] User $user, int $id, int $commentId): NoContentResponse
     {
-        if (!$this->commentService->isOwner($user->getId(), $commentId)) {
+        if ($user->getRoles()[0] != 'ROLE_ADMIN' && !$this->commentService->isOwner($user->getId(), $commentId)) {
             throw new AccessDeniedError();
         }
 
