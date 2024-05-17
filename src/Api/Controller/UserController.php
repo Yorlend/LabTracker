@@ -48,7 +48,11 @@ class UserController extends AbstractController
         #[MapQueryParameter(filter: FILTER_VALIDATE_INT, options: ['min_range' => 1])] ?int $group = null,
         #[MapQueryParameter(filter: FILTER_VALIDATE_INT, options: ['min_range' => 1])] ?int $role = null): IndexResponse
     {
-        $users = $this->service->getAll($group, $role);
+        $curRole = null;
+        if ($role != null){
+            $curRole = Role::from($role);
+        }
+        $users = $this->service->getAll($group, $curRole);
 
         return new IndexResponse($users);
     }

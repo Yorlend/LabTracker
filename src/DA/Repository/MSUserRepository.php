@@ -62,7 +62,6 @@ class MSUserRepository extends ServiceEntityRepository implements IUserRepositor
 
     public function getAll(int|null $groupId, Role|null $role): array
     {
-
         $res = [];
         if ($groupId == null && $role == null) {
             $data = $this->entityManager->getRepository(User::class)->findAll();
